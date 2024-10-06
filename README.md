@@ -19,3 +19,11 @@ npm update
 ```bash
 npm run dev
 ```
+
+## Generate Static Website
+
+The following command is shorthand for `npm run build && npx gh-pages -d build -t true`
+
+```bash
+npm run gh-pages
+```

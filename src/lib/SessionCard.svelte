@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { friendlyDates } from '$lib/Constants.svelte';
+	import { getFriendlyDate } from './Constants.svelte';
 
 	export let info: any;
 
@@ -15,7 +15,7 @@
 	<div class="card-info">
 		<div class="card-title">{info.title}</div>
 		<div class="date-time subtitle">
-			<div>🗓️ {friendlyDates[info.start.split('T')[0]] ?? info.start.split('T')[0]}</div>
+			<div>🗓️ {getFriendlyDate(info.start.split('T')[0])}</div>
 			<div>
 				🕣 {info.start.split('T')[1].split('+')[0] + ' - ' + info.end.split('T')[1].split('+')[0]}
 			</div>

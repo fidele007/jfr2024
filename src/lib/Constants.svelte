@@ -1,13 +1,9 @@
 <script context="module" lang="ts">
-	export const friendlyDates: any = {
-		'2023-10-12': 'jeu. 12 oct.',
-		'2023-10-13': 'ven. 13 oct.',
-		'2023-10-14': 'sam. 14 oct.',
-		'2023-10-15': 'dim. 15 oct.',
-		'2023-10-16': 'lun. 16 oct.'
-	};
-
 	export const normalizeString = (str: string) => str.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+	export const getFriendlyDate = (dateString: string) => {
+		return new Date(dateString).toLocaleDateString('fr-FR', {weekday: 'short', day: '2-digit', month: 'short'});
+	}
 
 	export const sanitizeFilename = (input: string, replacement: string = "") => {
 		if (typeof input !== 'string') {

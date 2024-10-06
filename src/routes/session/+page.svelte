@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import { friendlyDates, sanitizeFilename } from '$lib/Constants.svelte';
+	import { getFriendlyDate, sanitizeFilename } from '$lib/Constants.svelte';
 
 	const searchParams = browser && $page.url.searchParams;
 	let sessionId: string | null;
@@ -129,7 +129,7 @@
 				<h1>{eventDetail.title}</h1>
 				<div class="date-time subtitle">
 					<div>
-						🗓️ {friendlyDates[eventDetail.start.split('T')[0]] ?? eventDetail.start.split('T')[0]}
+						🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
 					</div>
 					<div>
 						🕣 {eventDetail.start.split('T')[1].split('+')[0] +

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import SessionCard from '$lib/SessionCard.svelte';
-	import { normalizeString } from '$lib/Constants.svelte';
+	import { getFriendlyDate, normalizeString } from '$lib/Constants.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import BackToTop from '$lib/BackToTop.svelte';
@@ -138,7 +138,7 @@
 			<ul class="menu">
 				{#each Object.keys(sessionsByDate) as date}
 				<li class={selectedDate == date ? 'selected' : ''}>
-					<a href="/" on:click|preventDefault={() => onDateChange(date)}>{date ? new Date(date).toLocaleDateString('fr-FR', {weekday: 'short', day: '2-digit', month: 'short'}) : 'Tout'}</a>
+					<a href="/" on:click|preventDefault={() => onDateChange(date)}>{date ? getFriendlyDate(date) : 'Tout'}</a>
 				</li>
 				{/each}
 			</ul>

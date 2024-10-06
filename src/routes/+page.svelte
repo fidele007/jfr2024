@@ -91,8 +91,10 @@
 		const response = await fetch(`${base}/json/event.json`);
 		eventJson = await response.json();
 
-		sessionsByDate[''] = eventJson.data.event.search.items;
-		eventJson.data.event.search.items.forEach((item: any) => {
+		const allRealItems = eventJson.data.event.search.items.filter((x: any) => !x.title.startsWith('Session test'));
+
+		sessionsByDate[''] = allRealItems;
+		allRealItems.forEach((item: any) => {
 			const startDate = item.start.split('T')[0];
 			if (!sessionsByDate[startDate]) {
 				sessionsByDate[startDate] = [];
@@ -117,30 +119,31 @@
 </svelte:head>
 
 <main>
-	<div>
-		<img src={logoUrl} class="logo" alt="JFR Logo" />
-		<h1>JFR 2024</h1>
-	</div>
-	<div id="search-container">
-		<input
-			id="search"
-			type="text"
-			placeholder="Rechercher"
-			bind:this={searchInput}
-			on:input={onSearch}
-		/>
-		<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
-	</div>
+	<div class="sticky-top" id="top-header">
+		<div>
+			<img src={logoUrl} class="logo" alt="JFR 2024" />
+		</div>
+		<div id="search-container">
+			<input
+				id="search"
+				type="text"
+				placeholder="Que recherchez-vous ?"
+				bind:this={searchInput}
+				on:input={onSearch}
+			/>
+			<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
+		</div>
 
-	<nav class="navbar">
-		<ul class="menu">
-			{#each Object.keys(sessionsByDate) as date}
-			<li class={selectedDate == date ? 'selected' : ''}>
-				<a href="/" on:click|preventDefault={() => onDateChange(date)}>{date ? date : 'Tout'}</a>
-			</li>
-			{/each}
-		</ul>
-	</nav>
+		<nav class="navbar">
+			<ul class="menu">
+				{#each Object.keys(sessionsByDate) as date}
+				<li class={selectedDate == date ? 'selected' : ''}>
+					<a href="/" on:click|preventDefault={() => onDateChange(date)}>{date ? new Date(date).toLocaleDateString('fr-FR', {weekday: 'short', day: '2-digit', month: 'short'}) : 'Tout'}</a>
+				</li>
+				{/each}
+			</ul>
+		</nav>
+	</div>
 
 	{#if loading}
 		<div class="DNA_cont">
@@ -174,10 +177,12 @@
 
 <style>
 	main {
-		max-width: 80%;
-		min-width: 80%;
-		margin: 0 auto;
-		padding: 2rem;
+		width: 100%;
+		padding: 1rem;
+	}
+
+	#top-header {
+		width: 100%;
 		text-align: center;
 	}
 
@@ -193,6 +198,7 @@
 	#search-container {
 		display: flex;
 		justify-content: center;
+		margin-top: 0.5rem;
 	}
 
 	#search {
@@ -203,7 +209,7 @@
 	}
 
 	.btn-delete-search {
-		border: 1px solid #f94b65;
+		border: 1px solid #11d7f2;
 		border-left: none;
 		outline: none;
 		background-color: transparent;
@@ -260,13 +266,18 @@
 
 	.navbar .menu li:hover,
 	.navbar .menu li.selected {
-		background-color: #f94b65;
+		background-color: #11d7f2;
 	}
 
 	.card-container {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		max-width: 80%;
+		min-width: 80%;
+		margin: 0 auto;
+		padding: 2rem;
+		text-align: center;
 	}
 
 	@media (prefers-color-scheme: light) {
@@ -276,9 +287,9 @@
 	}
 
 	@media (max-width: 1000px) {
-		main {
+		.card-container {
 			max-width: 100%;
-			padding: 1rem;
+			padding: 0;
 		}
 	}
 

@@ -1,7 +1,7 @@
 :root {
-	--font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+	--font: "Source Sans Pro", -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
 		'Open Sans', 'Helvetica Neue', sans-serif;
-	--font-mono: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
+	--font-mono: "Source Sans Pro", ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono',
 		monospace;
 
 	font-family: var(--font);
@@ -293,6 +293,9 @@ h1 {
 		color: #213547;
 		background-color: rgb(229 231 235);
 	}
+	.sticky-top {
+		background-color: rgb(229 231 235);
+	}
 	a:hover {
 		color: #747bff;
 	}
@@ -306,4 +309,12 @@ h1 {
 		align-items: start;
 		flex-direction: column;
 	}
+}
+
+.sticky-top {
+	top: 0;
+	/* padding-top: 1rem; */
+	position: sticky;
+	background-color: #242424;
+	z-index: 10;
 }

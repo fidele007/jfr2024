@@ -13,7 +13,7 @@
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div class="card" on:click={onSessionCardClick}>
 	<div class="card-info">
-		<div>{info.title}</div>
+		<div class="card-title">{info.title}</div>
 		<div class="date-time subtitle">
 			<div>🗓️ {friendlyDates[info.start.split('T')[0]] ?? info.start.split('T')[0]}</div>
 			<div>
@@ -42,6 +42,12 @@
 		-webkit-box-shadow: 0 1px 7px rgba(0, 0, 0, 0.05);
 		box-shadow: 0 5px 7px rgba(0, 0, 0, 0.05);
 		min-height: 130px;
+	}
+
+	.card-title {
+		font-size: 1rem;
+		font-weight: 700;
+		text-overflow: ellipsis;
 	}
 
 	.card:hover {

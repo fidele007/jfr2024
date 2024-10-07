@@ -82,7 +82,7 @@
 			const urlAlreadyIncluded = mediaList.some((item) => item.url === possibleVideoUrl);
 			if (!urlAlreadyIncluded && fileExists(possibleVideoUrl)) {
 				mediaList.push({
-					title: '[Unlisted Video]',
+					title: '[Non répertoriée]',
 					url: possibleVideoUrl,
 					thumbnail: eventDetail.picture,
 					start: eventDetail.start.split('T')[1].split('+')[0]

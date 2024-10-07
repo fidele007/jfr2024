@@ -29,57 +29,6 @@
                         "picture": null
                     },
                     {
-                        "id": "4c94d4ac-79d4-476f-9607-3b9919923065",
-                        "title": "Session test 353",
-                        "objectives": [],
-                        "start": "2024-10-03T08:00+02:00",
-                        "end": "2024-10-03T20:45+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "CYIM",
-                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
-                        "id": "5976c81f-8f5c-43ae-8a67-e7d9caaf786b",
-                        "title": "Session test Studio A",
-                        "objectives": [],
-                        "start": "2024-10-03T08:00+02:00",
-                        "end": "2024-10-03T20:00+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "CYIM",
-                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
-                        "id": "aadb9515-e9c3-4ba8-961c-d40d94edc967",
-                        "title": "Session test 352A",
-                        "objectives": [],
-                        "start": "2024-10-03T08:00+02:00",
-                        "end": "2024-10-03T20:45+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "CYIM",
-                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
                         "id": "ae415f68-192c-4123-92e1-f02d0ad76651",
                         "title": "Session test Bleu vote",
                         "objectives": [],
@@ -92,23 +41,6 @@
                             "expirationDate": null
                         },
                         "programmeOwners": [],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
-                        "id": "1e6c5388-6259-4da1-a0f1-ae1e68a76f7e",
-                        "title": "Session test VUS",
-                        "objectives": [],
-                        "start": "2024-10-03T08:05+02:00",
-                        "end": "2024-10-03T20:05+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "CYIM",
-                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
-                            }
-                        ],
                         "topics": [],
                         "tracks": [],
                         "picture": null
@@ -833,7 +765,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1350/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "e0f93201-d261-4d81-af55-a24d18b37ae9",
@@ -9601,28 +9533,6 @@
                         "picture": null
                     },
                     {
-                        "id": "1c49fd6f-4321-4590-942e-0776bb2a6cd1",
-                        "title": "Session Practice stage",
-                        "objectives": [],
-                        "start": "2024-10-06T08:00+02:00",
-                        "end": "2024-10-06T20:00+02:00",
-                        "vod": {
-                            "id": "1c49fd6f-4321-4590-942e-0776bb2a6cd1",
-                            "media": null,
-                            "releaseDate": "2024-10-03T19:00:00.000Z",
-                            "expirationDate": null
-                        },
-                        "programmeOwners": [
-                            {
-                                "title": "CYIM",
-                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
                         "id": "00559891-b930-4569-8e09-976d7e3880c5",
                         "title": "Tout comprendre sur la gestion\u00a0en\u00a0radiologie interventionnelle de\u00a0l\u2019isch\u00e9mie m\u00e9sent\u00e9rique art\u00e9rielle",
                         "objectives": [
@@ -12505,7 +12415,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2128/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "2946a11a-02da-480e-96fa-cdf82da561b1",
@@ -12805,7 +12715,7 @@
                         "id": "d5a0f15c-f006-4ac9-b760-fdef9ac90c81",
                         "title": "JFR Games - Epreuves des cas cliniques",
                         "objectives": [
-                            "<p>Que le meilleur gagne !</p>"
+                            "<p>Retrouvez les restitutions des cas pr\u00e9sent\u00e9s <a href=\"https://download.cyim.com/SFRadio/JFRGames.pptx\">ICI</a></p>"
                         ],
                         "start": "2024-10-06T15:00+02:00",
                         "end": "2024-10-06T16:00+02:00",
@@ -13134,27 +13044,6 @@
                             }
                         ],
                         "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1432/video/thumbs/poster.jpg"
-                    },
-                    {
-                        "id": "436e7540-768f-460c-a500-047d90a057b4",
-                        "title": "Super d\u00e9mo -\u00a0Biopsie tissus mous : avec ou sans valve ?",
-                        "objectives": [],
-                        "start": "2024-10-06T15:35+02:00",
-                        "end": "2024-10-06T15:50+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "JFR 2024",
-                                "id": "f611ad8b-1aa6-4e86-a968-fd38789b105e"
-                            },
-                            {
-                                "title": "Agenda Partenaire",
-                                "id": "e5137432-4bc5-40af-806e-f75f4193c084"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
                     },
                     {
                         "id": "affaacf1-5873-4a8e-b795-163463f78f9c",
@@ -13730,7 +13619,7 @@
                         "title": "S\u00e9ance de communications orales en imagerie neurologique",
                         "objectives": [],
                         "start": "2024-10-06T17:00+02:00",
-                        "end": "2024-10-06T18:00+02:00",
+                        "end": "2024-10-06T18:30+02:00",
                         "vod": {
                             "id": "77bafc44-7bf2-439b-9f6d-41fe3f9ffc63",
                             "media": null,
@@ -13969,23 +13858,6 @@
                         "picture": null
                     },
                     {
-                        "id": "1d1e54cc-96de-4cb5-9f7f-d3b75bddb58e",
-                        "title": "N\u00e9vrome de Morton et syndrome du deuxi\u00e8me rayon",
-                        "objectives": [],
-                        "start": "2024-10-06T17:25+02:00",
-                        "end": "2024-10-06T17:55+02:00",
-                        "vod": null,
-                        "programmeOwners": [
-                            {
-                                "title": "JFR 2024",
-                                "id": "f611ad8b-1aa6-4e86-a968-fd38789b105e"
-                            }
-                        ],
-                        "topics": [],
-                        "tracks": [],
-                        "picture": null
-                    },
-                    {
                         "id": "07392272-7b1f-4978-9afd-967e7ef6190d",
                         "title": "Atelier multimodalit\u00e9 des urgences abdominales et pelviennes -\u00a0Imagerie de la douleur pelvienne aigu\u00eb f\u00e9minine",
                         "objectives": [],
@@ -14005,7 +13877,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1355/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "3f5ad465-e641-41d9-b6e6-4c5b5a692f47",
@@ -14049,6 +13921,28 @@
                         ],
                         "topics": [],
                         "tracks": [],
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1179/video/thumbs/poster.jpg"
+                    },
+                    {
+                        "id": "1c49fd6f-4321-4590-942e-0776bb2a6cd1",
+                        "title": "Session Practice stage",
+                        "objectives": [],
+                        "start": "2024-10-07T08:00+02:00",
+                        "end": "2024-10-07T20:00+02:00",
+                        "vod": {
+                            "id": "1c49fd6f-4321-4590-942e-0776bb2a6cd1",
+                            "media": null,
+                            "releaseDate": "2024-10-03T19:00:00.000Z",
+                            "expirationDate": null
+                        },
+                        "programmeOwners": [
+                            {
+                                "title": "CYIM",
+                                "id": "b6639960-162f-43ff-8cfd-2b503bebb299"
+                            }
+                        ],
+                        "topics": [],
+                        "tracks": [],
                         "picture": null
                     },
                     {
@@ -14066,7 +13960,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2663/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "3062f11f-a655-49ca-9237-9344f1542ef2",
@@ -14114,7 +14008,7 @@
                                 "value": "Expert"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2535/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "4cb00558-fb61-49f1-981e-a75983213a30",
@@ -14143,7 +14037,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1398/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "767bdc25-1e5b-4982-b95e-5c6a74574078",
@@ -14212,7 +14106,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1123/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "f01bb865-b73f-4b75-867c-8008618af4ff",
@@ -14254,7 +14148,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/537/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "0b9e4ca3-bb29-446c-a038-48437956b8d5",
@@ -14299,7 +14193,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2595/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "78498393-69fd-4d31-99ac-ec60f7cd8d03",
@@ -14321,7 +14215,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1353/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "9ebb9474-a4fd-4ae6-9c09-a7ccfd20f5f8",
@@ -14343,7 +14237,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1218/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "09a71082-7253-4189-a9c1-f644fa3224ed",
@@ -14405,7 +14299,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1679/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "11c7fd39-1544-4323-a9d3-1f746b1d3829",
@@ -14457,7 +14351,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1079/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "07680ae3-51df-4cb1-89d1-6c77c9342f6b",
@@ -14503,7 +14397,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/14/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "3af4255f-5e5e-46d0-a618-91c3ba85e5b2",
@@ -14524,7 +14418,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1555/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "81b84ece-7a45-4322-9e2c-31458cd0d6f9",
@@ -14571,7 +14465,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1148/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "99afebdf-0f59-41f4-9b6f-69d8739db4f5",
@@ -14607,7 +14501,7 @@
                             }
                         ],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2347/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "9eb7e0a9-d902-4e0e-80a6-f8df6269baf5",
@@ -14669,7 +14563,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2562/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "47abc617-ba2f-4a7b-8cd0-288916ef46ea",
@@ -14695,7 +14589,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1466/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "65b3aed6-530e-49e1-a013-3ba8de3e8209",
@@ -14749,7 +14643,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1156/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "70e5c167-bc99-4362-a707-ffd229b29cd6",
@@ -14792,7 +14686,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/551/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "2c2df5bb-193d-4589-a836-7a98e6c7e168",
@@ -14868,7 +14762,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2500/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "c7a61560-bc3b-40b7-bd3e-2deda4a15a47",
@@ -14894,7 +14788,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/556/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "3184200b-bcde-4685-af1f-4a9d17a87350",
@@ -14916,7 +14810,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1386/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "8ed3cfe1-5394-4d23-83e0-bda7b9bccf48",
@@ -14938,7 +14832,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1219/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "c50e8d20-34a4-494b-8b58-28e7cda51347",
@@ -14960,7 +14854,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1196/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "d2a2c7b7-7e34-4e25-96a6-bf7ba25c8714",
@@ -14984,7 +14878,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1385/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "63a62604-c057-4458-90b2-b80a426852c5",
@@ -15005,7 +14899,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1557/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "311152c3-5b8e-4690-afe4-37ae45e93346",
@@ -15053,7 +14947,7 @@
                             }
                         ],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2550/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "bbcfb812-e862-4e2b-8654-5ab46637b36f",
@@ -15089,7 +14983,7 @@
                             }
                         ],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1018/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "31eadbd1-5df7-49ed-b840-ef42d4ac0ebc",
@@ -15128,7 +15022,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1157/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "50fb10a1-1501-442b-90c9-e32c3bcad6ac",
@@ -15172,7 +15066,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1642/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "8ad0790e-7137-4640-a088-72e3f786bfdf",
@@ -15239,7 +15133,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1202/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "e09337fe-dc26-4ac4-90c2-3f1e22c19e90",
@@ -15287,7 +15181,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/35/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "113004c1-e5f4-4b6e-9a66-6a40c9ae419a",
@@ -15332,7 +15226,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/56/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "3fa9ea14-3d4e-4911-99d0-b89d17299a1f",
@@ -15373,7 +15267,7 @@
                                 "value": "Expert"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/76/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "4a2d6768-3099-4cc2-a830-bf02efc35a3d",
@@ -15413,7 +15307,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1714/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "55be62b3-b150-49d5-87cd-0351f54e8ed2",
@@ -15453,7 +15347,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1335/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "7d197c0c-2156-4b34-9eb5-85cf12f23116",
@@ -15491,7 +15385,7 @@
                                 "value": "Expert"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/137/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "7c8d970a-3be8-47c1-8794-dd33486581a7",
@@ -15538,7 +15432,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1604/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "68b13352-f7cf-4fbd-8144-935197efd4df",
@@ -15560,7 +15454,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2659/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "f15716bc-415b-4a23-b3bf-f4bd77fafb8f",
@@ -15599,7 +15493,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1220/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "5c352270-7d8a-42b2-87b7-b7966719d0ba",
@@ -15621,7 +15515,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1387/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "6b48bc09-3ef9-479c-b073-e4d93cce7723",
@@ -15643,7 +15537,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1425/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "d501d6e1-fe7e-40b8-a868-93e72d4aec51",
@@ -15665,7 +15559,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1228/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "f2c36b2b-c0d1-4171-bb67-4fb926ba07c5",
@@ -15687,7 +15581,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1142/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "78774df5-0fb2-45a7-9244-12449adedb11",
@@ -15754,7 +15648,7 @@
                             }
                         ],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1022/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "f6ee6a68-fb93-4c79-8078-73c0e31539b2",
@@ -15842,7 +15736,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1655/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "4e475001-364e-44d6-b163-f030cf0ae863",
@@ -15935,7 +15829,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1135/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "89417434-473d-4197-b69c-d29e8f0ec3e4",
@@ -15973,7 +15867,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2563/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "8e89bd13-6928-478c-927c-4b8e4c837d49",
@@ -16053,7 +15947,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/53/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "cd890518-a234-4d1e-887c-e386675f595a",
@@ -16099,7 +15993,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1440/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "ce0d731f-729e-48aa-9c41-d1c0b861beff",
@@ -16141,7 +16035,7 @@
                                 "value": "Confirm\u00e9"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/124/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "03af85b9-7cdb-4ee6-a23e-15bf97cd07cc",
@@ -16163,7 +16057,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1354/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "128c70d1-901e-4b41-b509-acc20e863399",
@@ -16200,7 +16094,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1325/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "7620da0e-3bf6-4720-894e-78a247001c5c",
@@ -16222,7 +16116,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1455/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "f25d2de8-5bd7-4009-9135-0c0d728b5772",
@@ -16287,7 +16181,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/106/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "fb4e0f3c-9926-4992-b578-40a4ede44972",
@@ -16309,7 +16203,7 @@
                         ],
                         "topics": [],
                         "tracks": [],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/1230/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "37033770-c628-4c25-bdd5-4641454218d8",
@@ -16348,7 +16242,7 @@
                                 "value": "Expert"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2598/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "461b7771-b40f-462e-964e-b4dce8608511",
@@ -16382,7 +16276,7 @@
                                 "value": "D\u00e9butant"
                             }
                         ],
-                        "picture": null
+                        "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2501/video/thumbs/poster.jpg"
                     },
                     {
                         "id": "e15acba6-d1cc-4521-a806-4b1246b296dc",

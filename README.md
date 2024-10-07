@@ -8,10 +8,15 @@ This project aims to provide free media content for the [JFR 2024](https://www.j
 npm install
 ```
 
-## Upgrade All Dependencies
+## Upgrade All Dependencies (minor versions)
 
 ```bash
 npm update
+```
+## Upgrade All Dependencies (major versions)
+
+```bash
+npx npm-check-updates
 ```
 
 ## Run DEV

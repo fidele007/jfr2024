@@ -227,7 +227,7 @@
 	.navbar {
 		background-color: #2849ea;
 		color: #ffffff;
-		border-radius: 5px;
+		border-radius: 6px;
 		max-width: 820px;
 		margin: auto;
 	}

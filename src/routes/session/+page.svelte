@@ -14,6 +14,10 @@
 	let loading = true;
 	let sessionDetail: any;
 	let eventDetail: any;
+	let objectives: string;
+	let moderators: [any];
+	let responsables: [any];
+
 	let currentVideoTitle: string;
 	let currentVideoUrl: string;
 
@@ -60,6 +64,11 @@
 		const response = await fetch(`${base}/json/${sessionId}.json`);
 		sessionDetail = await response.json();
 		eventDetail = sessionDetail.data.event;
+
+		objectives = eventDetail.objectives.map((value: string) => `<div class="objectives-value">${value}</div>`).join('');
+
+		moderators = eventDetail.roles.find((role: any) => role.name === 'modérateur')?.assignees.items;
+		responsables = eventDetail.roles.find((role: any) => role.name === 'responsable')?.assignees.items;
 
 		// Add publicly available media to the media list
 		for (const item of eventDetail.schedule.items) {
@@ -124,8 +133,9 @@
 	{/if}
 
 	{#if !loading && eventDetail}
-		<div class="detail">
+		<div class="detail" style="border-left-color: {eventDetail.sessionTypeColor}">
 			<div class="session-header">
+				<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
 				<h1>{eventDetail.title}</h1>
 				<div class="date-time subtitle">
 					<div>
@@ -141,9 +151,41 @@
 			<div class="objectives">
 				<strong>Objectifs :</strong>
 				<div>
-					{@html eventDetail.objectives.join('')}
+					{@html objectives}
 				</div>
 			</div>
+			{#if moderators}
+			<div class="person-list">
+				<div class="role-label">Modérateur :</div>
+				{#each moderators as person}
+				<div class="person">
+					<div class="person-avatar">
+						<img class="avatar-image" src={person.photo.url} alt={person.firstName} />
+					</div>
+					<div class="person-info">
+						<div class="person-name">{`${person.firstName} ${person.lastName}`}</div>
+						<div class="person-location">{`${person.city.name}, ${person.country.name}`}</div>
+					</div>
+				</div>
+				{/each}
+			</div>
+			{/if}
+			{#if responsables}
+			<div class="person-list">
+				<div class="role-label">Responsable :</div>
+				{#each responsables as person}
+				<div class="person">
+					<div class="person-avatar">
+						<img class="avatar-image" src={person.photo.url} alt={person.firstName} />
+					</div>
+					<div class="person-info">
+						<div class="person-name">{`${person.firstName} ${person.lastName}`}</div>
+						<div class="person-location">{`${person.city.name}, ${person.country.name}`}</div>
+					</div>
+				</div>
+				{/each}
+			</div>
+			{/if}
 		</div>
 		<div class="media">
 			<div class="video-container">
@@ -248,6 +290,16 @@
 		flex-direction: column;
 		flex-grow: 0;
 		gap: 10px;
+		border-left: 6px solid;
+    	border-radius: 4px;
+		padding: 16px;
+		width: 100%;
+	}
+
+	.session-type {
+		font-size: .75rem;
+		font-weight: 700;
+		text-transform: uppercase;
 	}
 
 	.session-header {
@@ -261,9 +313,63 @@
 	}
 
 	.objectives {
+		border: 1px solid #e5e5e5;
+		border-radius: 4px;
 		padding: 15px;
-		background-color: rgb(24, 26, 27);
-		border-radius: 5px;
+		font-size: .9rem;
+	}
+
+	:global(.objectives-value) {
+		margin-top: 10px;
+	}
+
+	/* blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre { */
+	:global(.objectives p) {
+		margin: 0;
+	}
+
+	.role-label {
+		color: #8e8e8e;
+		font-size: .75rem;
+		font-weight: 600;
+		margin-right: 8px;
+		text-transform: uppercase;
+	}
+
+	.person-list {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+	}
+
+	.person-avatar {
+		min-height: 32px;
+		max-height: 32px;
+		min-width: 32px;
+		max-width: 32px;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	.avatar-image {
+		-o-object-fit: cover;
+		object-fit: cover;
+		height: 100%;
+		width: 100%;
+	}
+
+	.person {
+		display: flex;
+		gap: 8px;
+	}
+
+	.person-name {
+		font-weight: 600;
+		font-size: .875rem;
+	}
+
+	.person-location {
+		font-size: .6875rem;
 	}
 
 	.media {
@@ -378,15 +484,16 @@
 		.playlist {
 			max-height: 300px;
 		}
-
-		.detail {
-			width: 100%;
-		}
 	}
 
 	@media (prefers-color-scheme: light) {
+		.detail {
+			background-color: #fff;
+		}
+
 		.objectives {
-			background-color: #e8e8e8;
+			color: #545454;
+			background-color: #fdfdfd;
 		}
 
 		.playlist-item {

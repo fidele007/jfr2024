@@ -4,6 +4,7 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { getFriendlyDate, sanitizeFilename } from '$lib/Constants.svelte';
+	import Person from '$lib/Person.svelte';
 
 	const searchParams = browser && $page.url.searchParams;
 	let sessionId: string | null;
@@ -26,6 +27,7 @@
 		url: string;
 		thumbnail: string;
 		start: string;
+		speakers: [any] | null;
 	}[] = [];
 
 	const fileExists = (fileUrl: string) => {
@@ -77,7 +79,8 @@
 					title: item.title,
 					url: item.vod.media.element.sources[0].uri,
 					thumbnail: item.vod.media.thumbnail,
-					start: item.start.split('T')[1].split('+')[0]
+					start: item.start.split('T')[1].split('+')[0],
+					speakers: item.speakers.items
 				});
 			}
 		}
@@ -94,7 +97,8 @@
 					title: '[Non répertoriée]',
 					url: possibleVideoUrl,
 					thumbnail: eventDetail.picture,
-					start: eventDetail.start.split('T')[1].split('+')[0]
+					start: eventDetail.start.split('T')[1].split('+')[0],
+					speakers: null
 				});
 			}
 		}
@@ -158,15 +162,7 @@
 			<div class="person-list">
 				<div class="role-label">Modérateur :</div>
 				{#each moderators as person}
-				<div class="person">
-					<div class="person-avatar">
-						<img class="avatar-image" src={person.photo.url} alt={person.firstName} />
-					</div>
-					<div class="person-info">
-						<div class="person-name">{`${person.firstName} ${person.lastName}`}</div>
-						<div class="person-location">{`${person.city.name}, ${person.country.name}`}</div>
-					</div>
-				</div>
+				<Person info={person} />
 				{/each}
 			</div>
 			{/if}
@@ -174,15 +170,7 @@
 			<div class="person-list">
 				<div class="role-label">Responsable :</div>
 				{#each responsables as person}
-				<div class="person">
-					<div class="person-avatar">
-						<img class="avatar-image" src={person.photo.url} alt={person.firstName} />
-					</div>
-					<div class="person-info">
-						<div class="person-name">{`${person.firstName} ${person.lastName}`}</div>
-						<div class="person-location">{`${person.city.name}, ${person.country.name}`}</div>
-					</div>
-				</div>
+				<Person info={person} />
 				{/each}
 			</div>
 			{/if}
@@ -209,6 +197,13 @@
 							</div>
 							<div class="video-details">
 								<div><strong>{item.title}</strong></div>
+								{#if item.speakers}
+								<div class="speakers">
+									{#each item.speakers as speaker}
+									<Person info={speaker} />
+									{/each}
+								</div>
+								{/if}
 								<div class="subtitle">
 									<span>{item.start}</span>
 									<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
@@ -342,36 +337,6 @@
 		gap: 5px;
 	}
 
-	.person-avatar {
-		min-height: 32px;
-		max-height: 32px;
-		min-width: 32px;
-		max-width: 32px;
-		border-radius: 50%;
-		overflow: hidden;
-	}
-
-	.avatar-image {
-		-o-object-fit: cover;
-		object-fit: cover;
-		height: 100%;
-		width: 100%;
-	}
-
-	.person {
-		display: flex;
-		gap: 8px;
-	}
-
-	.person-name {
-		font-weight: 600;
-		font-size: .875rem;
-	}
-
-	.person-location {
-		font-size: .6875rem;
-	}
-
 	.media {
 		display: flex;
 		gap: 15px;
@@ -390,6 +355,10 @@
 		overflow: hidden;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
+	}
+
+	.video-player {
+		border: 1px solid #bababa;
 	}
 
 	.playlist-container {
@@ -430,6 +399,7 @@
 	.video-details {
 		display: flex;
 		flex-direction: column;
+		gap: 5px;
 	}
 
 	.thumbnail-container {

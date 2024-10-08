@@ -198,7 +198,10 @@
 								<img class="thumbnail" src={item.thumbnail} alt={item.title} />
 							</div>
 							<div class="video-details">
-								<div><strong>{item.title}</strong></div>
+								<div>
+									<strong>{item.title}</strong>
+									<span class="media-title-time">🕣 {item.start}</span>
+								</div>
 								{#if item.speakers}
 								<div class="speakers">
 									{#each item.speakers as speaker}
@@ -207,7 +210,7 @@
 								</div>
 								{/if}
 								<div class="subtitle">
-									<span>{item.start}</span>
+									<!-- <span>{item.start}</span> -->
 									<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
 										<svg
 											width="16"
@@ -402,6 +405,11 @@
 		display: flex;
 		flex-direction: column;
 		gap: 5px;
+	}
+
+	.media-title-time {
+		font-size: 80%;
+		filter: brightness(80%);
 	}
 
 	.thumbnail-container {

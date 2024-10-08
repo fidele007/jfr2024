@@ -152,12 +152,14 @@
 					</div>
 				</div>
 			</div>
+			{#if objectives}
 			<div class="objectives">
 				<strong>Objectifs :</strong>
 				<div>
 					{@html objectives}
 				</div>
 			</div>
+			{/if}
 			{#if moderators}
 			<div class="person-list">
 				<div class="role-label">Modérateur :</div>

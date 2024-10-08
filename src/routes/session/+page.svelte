@@ -420,7 +420,6 @@
 	video {
 		margin: 0;
 		max-width: 100%;
-		height: calc(100% - 30px);
 	}
 
 	.btn-download {

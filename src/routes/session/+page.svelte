@@ -23,6 +23,7 @@
 	let currentVideoUrl: string;
 
 	let mediaList: {
+		id: string | null;
 		title: string;
 		url: string;
 		thumbnail: string;
@@ -76,6 +77,7 @@
 		for (const item of eventDetail.schedule.items) {
 			if (item.vod && item.vod.media && item.vod.media.element && item.vod.media.element.sources) {
 				mediaList.push({
+					id: item.vod.media.id,
 					title: item.title,
 					url: item.vod.media.element.sources[0].uri,
 					thumbnail: item.vod.media.thumbnail,
@@ -94,6 +96,7 @@
 			const urlAlreadyIncluded = mediaList.some((item) => item.url === possibleVideoUrl);
 			if (!urlAlreadyIncluded && fileExists(possibleVideoUrl)) {
 				mediaList.push({
+					id: null,
 					title: '[Non répertoriée]',
 					url: possibleVideoUrl,
 					thumbnail: eventDetail.picture,
@@ -107,6 +110,8 @@
 			currentVideoTitle = mediaList[0].title;
 			currentVideoUrl = mediaList[0].url;
 		}
+
+		console.log(mediaList);
 
 		loading = false;
 	});
@@ -198,19 +203,9 @@
 								<img class="thumbnail" src={item.thumbnail} alt={item.title} />
 							</div>
 							<div class="video-details">
-								<div>
-									<strong>{item.title}</strong>
-									<span class="media-title-time">🕣 {item.start}</span>
-								</div>
-								{#if item.speakers}
-								<div class="speakers">
-									{#each item.speakers as speaker}
-									<Person info={speaker} />
-									{/each}
-								</div>
-								{/if}
+								<div><strong>{item.title}{item.id ? '' : ' 🤫'}</strong></div>
 								<div class="subtitle">
-									<!-- <span>{item.start}</span> -->
+									<span>🕣 {item.start}</span>
 									<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
 										<svg
 											width="16"
@@ -232,6 +227,13 @@
 										<div>Télécharger</div>
 									</button>
 								</div>
+								{#if item.speakers}
+								<div class="speakers">
+									{#each item.speakers as speaker}
+									<Person info={speaker} />
+									{/each}
+								</div>
+								{/if}
 							</div>
 						</div>
 					{/each}

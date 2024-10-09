@@ -165,21 +165,29 @@
 				</div>
 			</div>
 			{/if}
-			{#if moderators}
-			<div class="person-list">
-				<div class="role-label">Modérateur :</div>
-				{#each moderators as person}
-				<Person info={person} />
-				{/each}
-			</div>
-			{/if}
-			{#if responsables}
-			<div class="person-list">
-				<div class="role-label">Responsable :</div>
-				{#each responsables as person}
-				<Person info={person} />
-				{/each}
-			</div>
+			{#if moderators || responsables}
+			<table class="person-list">
+				{#if moderators}
+				<tr>
+					<td class="role-label">Modérateur :</td>
+					<td>
+						{#each moderators as person}
+						<Person info={person} />
+						{/each}
+					</td>
+				</tr>
+				{/if}
+				{#if responsables}
+				<tr>
+					<td class="role-label">Responsable :</td>
+					<td>
+						{#each responsables as person}
+						<Person info={person} />
+						{/each}
+					</td>
+				</tr>
+				{/if}
+			</table>
 			{/if}
 		</div>
 		<div class="media">
@@ -338,10 +346,22 @@
 		text-transform: uppercase;
 	}
 
-	.person-list {
+	table.person-list {
+		table-layout: auto;
+		width: fit-content;
+	}
+
+	table.person-list > tr td:first-child {
+		vertical-align: top;
+		padding-top: 10px;
+		min-width: 90px;
+	}
+
+	table.person-list > tr td:last-child {
 		display: flex;
 		align-items: center;
-		gap: 5px;
+		gap: 10px;
+		flex-wrap: wrap;
 	}
 
 	.media {

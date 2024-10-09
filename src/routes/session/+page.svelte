@@ -406,12 +406,13 @@
 	.video-details {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
+		gap: 4px;
 	}
 
-	.media-title-time {
-		font-size: 80%;
-		filter: brightness(80%);
+	.speakers {
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
 	}
 
 	.thumbnail-container {

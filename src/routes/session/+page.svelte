@@ -127,127 +127,127 @@
 	</a>
 
 	{#if loading}
-		<div class="DNA_cont">
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-			<div class="nucleobase"></div>
-		</div>
+	<div class="DNA_cont">
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+		<div class="nucleobase"></div>
+	</div>
 	{/if}
 
 	{#if !loading && eventDetail}
-		<div class="detail" style="border-left-color: {eventDetail.sessionTypeColor}">
-			<div class="session-header">
-				<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
-				<h1>{eventDetail.title}</h1>
-				<div class="date-time subtitle">
-					<div>
-						🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
-					</div>
-					<div>
-						🕣 {eventDetail.start.split('T')[1].split('+')[0] +
-							' - ' +
-							eventDetail.end.split('T')[1].split('+')[0]}
-					</div>
-				</div>
-			</div>
-			{#if objectives}
-			<div class="objectives">
-				<strong>Objectifs :</strong>
-				<div>
-					{@html objectives}
-				</div>
-			</div>
-			{/if}
-			{#if moderators || responsables}
-			<table class="person-list">
-				{#if moderators}
-				<tr>
-					<td class="role-label">Modérateur :</td>
-					<td>
-						{#each moderators as person}
-						<Person info={person} />
-						{/each}
-					</td>
-				</tr>
-				{/if}
-				{#if responsables}
-				<tr>
-					<td class="role-label">Responsable :</td>
-					<td>
-						{#each responsables as person}
-						<Person info={person} />
-						{/each}
-					</td>
-				</tr>
-				{/if}
-			</table>
-			{/if}
+	<div class="media">
+		<div class="video-container">
+			<div><strong>{currentVideoTitle}</strong></div>
+			<video controls class="video-player" src={currentVideoUrl}>
+				<track kind="captions" />
+			</video>
 		</div>
-		<div class="media">
-			<div class="video-container">
-				<div><strong>{currentVideoTitle}</strong></div>
-				<video controls class="video-player" src={currentVideoUrl}>
-					<track kind="captions" />
-				</video>
-			</div>
-			<div class="playlist-container">
-				<div><strong>Liste de lecture :</strong></div>
-				<div class="playlist">
-					{#each mediaList as item}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
-						<!-- svelte-ignore a11y-no-static-element-interactions -->
-						<div
-							class="playlist-item {item.url == currentVideoUrl ? 'selected' : ''}"
-							on:click={() => onClickPlaylistItem(item.title, item.url)}
-						>
-							<div class="thumbnail-container">
-								<img class="thumbnail" src={item.thumbnail} alt={item.title} />
-							</div>
-							<div class="video-details">
-								<div><strong>{item.title}{item.id ? '' : ' 🤫'}</strong></div>
-								<div class="subtitle">
-									<span>🕣 {item.start}</span>
-									<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
-										<svg
-											width="16"
-											height="16"
-											viewBox="0 0 24 24"
-											fill="none"
-											class="svg-icon"
-											xmlns="http://www.w3.org/2000/svg"
-										>
-											<path
-												d="M11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V12.1578L16.2428 8.91501L17.657 10.3292L12.0001 15.9861L6.34326 10.3292L7.75748 8.91501L11 12.1575V5Z"
-												fill="currentColor"
-											/>
-											<path
-												d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z"
-												fill="currentColor"
-											/>
-										</svg>
-										<div>Télécharger</div>
-									</button>
-								</div>
-								{#if item.speakers}
-								<div class="speakers">
-									{#each item.speakers as speaker}
-									<Person info={speaker} />
-									{/each}
-								</div>
-								{/if}
-							</div>
+		<div class="playlist-container">
+			<div><strong>Liste de lecture :</strong></div>
+			<div class="playlist">
+				{#each mediaList as item}
+					<!-- svelte-ignore a11y-click-events-have-key-events -->
+					<!-- svelte-ignore a11y-no-static-element-interactions -->
+					<div
+						class="playlist-item {item.url == currentVideoUrl ? 'selected' : ''}"
+						on:click={() => onClickPlaylistItem(item.title, item.url)}
+					>
+						<div class="thumbnail-container">
+							<img class="thumbnail" src={item.thumbnail} alt={item.title} />
 						</div>
-					{/each}
+						<div class="video-details">
+							<div class="media-title"><strong>{item.title}{item.id ? '' : ' 🤫'}</strong></div>
+							<div class="subtitle">
+								<span>🕣 {item.start}</span>
+								<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
+									<svg
+										width="16"
+										height="16"
+										viewBox="0 0 24 24"
+										fill="none"
+										class="svg-icon"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V12.1578L16.2428 8.91501L17.657 10.3292L12.0001 15.9861L6.34326 10.3292L7.75748 8.91501L11 12.1575V5Z"
+											fill="currentColor"
+										/>
+										<path
+											d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z"
+											fill="currentColor"
+										/>
+									</svg>
+									<div>Télécharger</div>
+								</button>
+							</div>
+							{#if item.speakers}
+							<div class="speakers">
+								{#each item.speakers as speaker}
+								<Person info={speaker} />
+								{/each}
+							</div>
+							{/if}
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</div>
+	<div class="detail" style="border-left-color: {eventDetail.sessionTypeColor}">
+		<div class="session-header">
+			<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
+			<h1>{eventDetail.title}</h1>
+			<div class="date-time subtitle">
+				<div>
+					🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
+				</div>
+				<div>
+					🕣 {eventDetail.start.split('T')[1].split('+')[0] +
+						' - ' +
+						eventDetail.end.split('T')[1].split('+')[0]}
 				</div>
 			</div>
 		</div>
+		{#if objectives}
+		<div class="objectives">
+			<strong>Objectifs :</strong>
+			<div>
+				{@html objectives}
+			</div>
+		</div>
+		{/if}
+		{#if moderators || responsables}
+		<table class="person-list">
+			{#if moderators}
+			<tr>
+				<td class="role-label">Modérateur :</td>
+				<td>
+					{#each moderators as person}
+					<Person info={person} />
+					{/each}
+				</td>
+			</tr>
+			{/if}
+			{#if responsables}
+			<tr>
+				<td class="role-label">Responsable :</td>
+				<td>
+					{#each responsables as person}
+					<Person info={person} />
+					{/each}
+				</td>
+			</tr>
+			{/if}
+		</table>
+		{/if}
+	</div>
 	{/if}
 </main>
 
@@ -370,6 +370,7 @@
 		flex-grow: 1;
 		width: 100%;
 		overflow-y: hidden;
+		min-height: 650px;
 	}
 
 	.video-container {
@@ -421,6 +422,20 @@
 
 	.playlist-item.selected {
 		border-left: 3px solid blueviolet;
+	}
+
+	.media-title {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: box;
+		font-size: 14px;
+		line-clamp: 2;
+		line-height: 1rem;
+		max-height: 2rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+    	display: -webkit-box;
 	}
 
 	.video-details {
@@ -485,7 +500,7 @@
 		}
 
 		.playlist {
-			max-height: 300px;
+			max-height: 450px;
 		}
 	}
 

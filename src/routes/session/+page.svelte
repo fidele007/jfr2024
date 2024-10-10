@@ -107,7 +107,7 @@
 		}
 
 		if (mediaList.length > 0) {
-			currentVideoTitle = mediaList[0].title;
+			currentVideoTitle = mediaList[0].title + (mediaList[0].id ? '' : ' Ⓜ️');
 			currentVideoUrl = mediaList[0].url;
 		}
 
@@ -163,7 +163,7 @@
 							<img class="thumbnail" src={item.thumbnail} alt={item.title} />
 						</div>
 						<div class="video-details">
-							<div class="media-title"><strong>{item.title}{item.id ? '' : ' 🤫'}</strong></div>
+							<div class="media-title"><strong>{item.title}{item.id ? '' : ' Ⓜ️'}</strong></div>
 							<div class="subtitle">
 								<span>🕣 {item.start}</span>
 								<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>

@@ -20,6 +20,7 @@
 	let responsables: [any];
 
 	let currentVideoTitle: string;
+	let currentSpeakers: [any] | null;
 	let currentVideoUrl: string;
 
 	let mediaList: {
@@ -40,8 +41,10 @@
 		return http.status != 404;
 	};
 
-	const onClickPlaylistItem = (title: string, url: string) => {
+	const onClickPlaylistItem = (title: string, url: string, speakers: [any] | null) => {
 		currentVideoTitle = title;
+		currentSpeakers = speakers;
+		console.log(currentSpeakers);
 		currentVideoUrl = url;
 	};
 
@@ -52,7 +55,6 @@
 		const urlSplit = url.split(".");
 		const fileExtension = "." + urlSplit[urlSplit.length - 1];
 		anchor.download = sanitizeFilename(title) + fileExtension;
-		// console.log("Downloaded file: " + anchor.download);
 
 		anchor.target = "_blank";
 
@@ -108,6 +110,7 @@
 
 		if (mediaList.length > 0) {
 			currentVideoTitle = mediaList[0].title + (mediaList[0].id ? '' : ' Ⓜ️');
+			currentSpeakers = mediaList[0].speakers;
 			currentVideoUrl = mediaList[0].url;
 		}
 
@@ -144,20 +147,30 @@
 	{#if !loading && eventDetail}
 	<div class="media">
 		<div class="video-container">
-			<div><strong>{currentVideoTitle}</strong></div>
+			<div id="current-media-info">
+				<div><strong>{currentVideoTitle}</strong></div>
+				{#if currentSpeakers}
+				<div class="speakers">
+					{#each currentSpeakers as speaker}
+					<Person info={speaker} />
+					{/each}
+				</div>
+				{/if}
+			</div>
 			<video controls class="video-player" src={currentVideoUrl}>
 				<track kind="captions" />
 			</video>
 		</div>
 		<div class="playlist-container">
-			<div><strong>Liste de lecture :</strong></div>
+			<div id="playlist-title"><strong>Liste de lecture ({mediaList.length}):</strong></div>
 			<div class="playlist">
 				{#each mediaList as item}
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div
 						class="playlist-item {item.url == currentVideoUrl ? 'selected' : ''}"
-						on:click={() => onClickPlaylistItem(item.title, item.url)}
+						on:click={() => onClickPlaylistItem(item.title, item.url, item.speakers)}
+						title={item.title}{item.id ? '' : ' Ⓜ️'}
 					>
 						<div class="thumbnail-container">
 							<img class="thumbnail" src={item.thumbnail} alt={item.title} />
@@ -370,13 +383,22 @@
 		flex-grow: 1;
 		width: 100%;
 		overflow-y: hidden;
-		min-height: 650px;
+		min-height: 469px;
+	}
+
+	#current-media-info, #playlist-title {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		border-top-left-radius: 4px;
+		border-top-right-radius: 4px;
+		padding: 8px 12px;
+		background-color: rgb(24, 26, 27);
 	}
 
 	.video-container {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
 		flex-grow: 1;
 		/* Rounded corners for video */
 		border-radius: 5px;
@@ -393,30 +415,38 @@
 		flex: 0 0 35%;
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
 		max-height: 100%;
 	}
 
 	.playlist {
 		display: flex;
 		flex-direction: column;
-		gap: 10px;
 		overflow-y: auto;
+		background-color: rgb(24, 26, 27);
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
+		padding: 5px;
+	}
+
+	.playlist .playlist-item:first-child {
+		border-top-left-radius: 2px;
+		border-top-right-radius: 2px;
+	}
+
+	.playlist .playlist-item:last-child {
+		border-bottom-left-radius: 2px;
+		border-bottom-right-radius: 2px;
 	}
 
 	.playlist-item {
 		display: flex;
 		gap: 10px;
-		border: 1px solid rgb(24, 26, 27);
-		background-color: rgb(24, 26, 27);
 		padding: 5px;
-		border-radius: 5px;
 		cursor: pointer;
 	}
 
 	.playlist-item.selected,
 	.playlist-item:hover {
-		border: 1px solid rgb(57, 62, 64);
 		background-color: rgb(33, 36, 37);
 	}
 
@@ -441,7 +471,6 @@
 	.video-details {
 		display: flex;
 		flex-direction: column;
-		gap: 4px;
 	}
 
 	.speakers {
@@ -457,7 +486,7 @@
 	}
 
 	.thumbnail {
-		border-radius: 5px;
+		border-radius: 2px;
 	}
 
 	img {
@@ -468,7 +497,7 @@
 	video {
 		margin: 0;
 		max-width: 100%;
-		height: calc(100% - 30px);
+		height: calc(100% - 73px);
 	}
 
 	.btn-download {
@@ -505,8 +534,12 @@
 	}
 
 	@media (prefers-color-scheme: light) {
-		.detail {
+		.detail, .playlist {
 			background-color: #fff;
+		}
+
+		#current-media-info, #playlist-title {
+			background-color: #fdfdfd;
 		}
 
 		.objectives {
@@ -515,13 +548,11 @@
 		}
 
 		.playlist-item {
-			background-color: #e8e8e8;
-			border-color: #e8e8e8;
+			background-color: #fff;
 		}
 
 		.playlist-item.selected,
 		.playlist-item:hover {
-			border: 1px solid #bababa;
 			background-color: #d1d1d1;
 		}
 

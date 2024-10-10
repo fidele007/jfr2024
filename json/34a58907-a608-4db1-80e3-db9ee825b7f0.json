@@ -1,1 +1,131 @@
-{"data": {"event": {"id": "34a58907-a608-4db1-80e3-db9ee825b7f0", "picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2437/video/thumbs/poster.jpg", "sessionType": "Pitch", "sessionTypeColor": "#c95050", "voting": null, "title": "Un changement de paradigme dans la prise en charge du cancer de la prostate", "start": "2024-10-04T15:30+02:00", "end": "2024-10-04T15:45+02:00", "objectives": [], "onAir": null, "vod": null, "broadcasts": {"items": []}, "room": {"id": "43578b58-c3d4-4d8c-bf04-2c0ae4f294ef", "name": "Forum IA", "type": "ROOM"}, "schedule": {"items": [{"id": "aca2aabd-f853-49fa-8b97-437796b39362", "title": "Un changement de paradigme dans la prise en charge du cancer de la prostate", "start": "2024-10-04T15:30+02:00", "end": "2024-10-04T15:45+02:00", "element": {"abstract": null}, "speakers": {"items": [{"id": "84e5bf54-9d5b-4739-a512-7accaac71dfb", "lastName": "Puech", "firstName": "Philippe", "roles": [{"name": "speaker"}], "photo": {"url": "https://services.y-congress.com/congress/wspreview/getphoto.aspx?idPhoto=121425&t=1"}, "country": {"name": "France"}, "city": {"name": "Lille"}}]}, "vod": null}, {"id": "8853cc25-4795-4eb3-875d-e24c4efb23f5", "title": "QP Prostate", "start": "2024-10-04T15:45+02:00", "end": "2024-10-04T15:50+02:00", "element": {"abstract": null}, "speakers": {"items": []}, "vod": null}]}, "roles": [], "speakers": {"items": [{"id": "84e5bf54-9d5b-4739-a512-7accaac71dfb", "firstName": "Philippe", "lastName": "Puech", "photo": {"url": "https://services.y-congress.com/congress/wspreview/getphoto.aspx?idPhoto=121425&t=1"}, "country": {"name": "France"}, "city": {"name": "Lille"}}]}, "chairs": {"items": []}, "topics": [], "tracks": [], "organizers": [{"id": "0aa00024-578f-4baf-a412-d8b82ecce510", "name": "Quibim", "logo": null}], "programmeOwners": [{"title": "JFR 2024", "id": "f611ad8b-1aa6-4e86-a968-fd38789b105e"}, {"title": "Agenda Partenaire", "id": "e5137432-4bc5-40af-806e-f75f4193c084"}]}}}
+{
+	"data": {
+		"event": {
+			"id": "34a58907-a608-4db1-80e3-db9ee825b7f0",
+			"picture": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2437/video/thumbs/poster.jpg",
+			"sessionType": "Pitch",
+			"sessionTypeColor": "#c95050",
+			"voting": null,
+			"title": "Un changement de paradigme dans la prise en charge du cancer de la prostate",
+			"start": "2024-10-04T15:30+02:00",
+			"end": "2024-10-04T15:45+02:00",
+			"objectives": [],
+			"onAir": null,
+			"vod": null,
+			"broadcasts": {
+				"items": []
+			},
+			"room": {
+				"id": "43578b58-c3d4-4d8c-bf04-2c0ae4f294ef",
+				"name": "Forum IA",
+				"type": "ROOM"
+			},
+			"schedule": {
+				"items": [
+					{
+						"id": "aca2aabd-f853-49fa-8b97-437796b39362",
+						"title": "Un changement de paradigme dans la prise en charge du cancer de la prostate",
+						"start": "2024-10-04T15:30+02:00",
+						"end": "2024-10-04T15:45+02:00",
+						"element": {
+							"abstract": null
+						},
+						"speakers": {
+							"items": [
+								{
+									"id": "84e5bf54-9d5b-4739-a512-7accaac71dfb",
+									"lastName": "Puech",
+									"firstName": "Philippe",
+									"roles": [
+										{
+											"name": "speaker"
+										}
+									],
+									"photo": {
+										"url": "https://services.y-congress.com/congress/wspreview/getphoto.aspx?idPhoto=121425&t=1"
+									},
+									"country": {
+										"name": "France"
+									},
+									"city": {
+										"name": "Lille"
+									}
+								}
+							]
+						},
+						"vod": {
+							"media": {
+								"type": "VIDEO",
+								"thumbnail": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2437/video/thumbs/poster.jpg",
+								"element": {
+									"sources": [
+										{
+											"uri": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2437/video/y_1080p_4000kb.mp4"
+										},
+										{
+											"uri": "https://services.medicalcongress.online/congress/medias/2024/JFR2024/2437/video/y_480p_800kb.mp4"
+										}
+									]
+								}
+							}
+						}
+					},
+					{
+						"id": "8853cc25-4795-4eb3-875d-e24c4efb23f5",
+						"title": "QP Prostate",
+						"start": "2024-10-04T15:45+02:00",
+						"end": "2024-10-04T15:50+02:00",
+						"element": {
+							"abstract": null
+						},
+						"speakers": {
+							"items": []
+						},
+						"vod": null
+					}
+				]
+			},
+			"roles": [],
+			"speakers": {
+				"items": [
+					{
+						"id": "84e5bf54-9d5b-4739-a512-7accaac71dfb",
+						"firstName": "Philippe",
+						"lastName": "Puech",
+						"photo": {
+							"url": "https://services.y-congress.com/congress/wspreview/getphoto.aspx?idPhoto=121425&t=1"
+						},
+						"country": {
+							"name": "France"
+						},
+						"city": {
+							"name": "Lille"
+						}
+					}
+				]
+			},
+			"chairs": {
+				"items": []
+			},
+			"topics": [],
+			"tracks": [],
+			"organizers": [
+				{
+					"id": "0aa00024-578f-4baf-a412-d8b82ecce510",
+					"name": "Quibim",
+					"logo": null
+				}
+			],
+			"programmeOwners": [
+				{
+					"title": "JFR 2024",
+					"id": "f611ad8b-1aa6-4e86-a968-fd38789b105e"
+				},
+				{
+					"title": "Agenda Partenaire",
+					"id": "e5137432-4bc5-40af-806e-f75f4193c084"
+				}
+			]
+		}
+	}
+}

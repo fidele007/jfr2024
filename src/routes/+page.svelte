@@ -4,6 +4,7 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import BackToTop from '$lib/BackToTop.svelte';
+	import { filterOptions } from '../stores';
 
 	let searchInput: HTMLInputElement;
 
@@ -14,15 +15,14 @@
 	let loading = true;
 	let timeout: ReturnType<typeof setTimeout>;
 
+	let sortAlphabetically: boolean;
+	let onlyVideos: boolean;
 	let selectedDate: string = '';
 
 	let eventJson: any;
 	let sessionsByDate: any = {};
 	let filteredSessions: any;
 	let displaySessions: any;
-
-	let sortAlphabetically: boolean;
-	let onlyVideos: boolean;
 
 	const debounce = (callback: Function, wait = 300) => {
 		return (...args: any[]) => {
@@ -59,6 +59,13 @@
 		displaySessions = filteredSessions.slice(0, FETCH_LIMIT);
 
 		loading = false;
+
+		$filterOptions = {
+			filterKeyword: searchInput.value,
+			sortAlphabetically: sortAlphabetically,
+			onlyVideos: onlyVideos,
+			selectedDate: selectedDate,
+		}
 	};
 
 	const onSearch = async () => {
@@ -103,6 +110,11 @@
 	};
 
 	onMount(async () => {
+		searchInput.value = $filterOptions.filterKeyword;
+		sortAlphabetically = $filterOptions.sortAlphabetically;
+		onlyVideos = $filterOptions.onlyVideos;
+		selectedDate = $filterOptions.selectedDate;
+
 		const response = await fetch(`${base}/json/event.json`);
 		eventJson = await response.json();
 

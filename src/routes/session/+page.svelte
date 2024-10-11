@@ -145,10 +145,11 @@
 	{/if}
 
 	{#if !loading && eventDetail}
+	{#if mediaList.length > 0}
 	<div class="media">
 		<div class="video-container">
 			<div id="current-media-info">
-				<div><strong>{currentVideoTitle}</strong></div>
+				<div><strong>{currentVideoTitle ?? '😶‍🌫️'}</strong></div>
 				{#if currentSpeakers}
 				<div class="speakers">
 					{#each currentSpeakers as speaker}
@@ -213,6 +214,7 @@
 			</div>
 		</div>
 	</div>
+	{/if}
 	<div class="detail" style="border-left-color: {eventDetail.sessionTypeColor}">
 		<div class="session-header">
 			<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>

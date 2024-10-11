@@ -190,12 +190,15 @@
 <style>
 	main {
 		width: 100%;
-		padding: 1rem;
 	}
 
 	#top-header {
 		width: 100%;
 		text-align: center;
+		padding-top: 0.5rem;
+		padding-bottom: 0.1rem;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
 	}
 
 	.logo {
@@ -320,7 +323,15 @@
 	@media (max-width: 1000px) {
 		.card-container {
 			max-width: 100%;
-			padding: 0;
+			padding: 1rem;
+		}
+
+		#top-header {
+			padding-top: 0.5rem;
+			padding-bottom: 0.1rem;
+			padding-left: 1rem;
+			padding-right: 1rem;
+			width: unset;
 		}
 	}
 

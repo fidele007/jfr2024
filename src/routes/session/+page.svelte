@@ -485,6 +485,7 @@
 		display: flex;
 		height: 100px;
 		align-self: center;
+		align-items: center;
 	}
 
 	.thumbnail {
@@ -519,6 +520,7 @@
 	@media (max-width: 1000px) {
 		main {
 			max-height: fit-content;
+			padding: 8px;
 		}
 
 		.objectives {
@@ -532,6 +534,10 @@
 
 		.playlist {
 			max-height: 450px;
+		}
+
+		img {
+			height: 85%;
 		}
 	}
 

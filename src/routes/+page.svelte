@@ -234,16 +234,6 @@
 		flex-wrap: wrap;
 	}
 
-	#filter-row input[type="checkbox"] {
-		/* Double-sized Checkboxes */
-		-ms-transform: scale(1.3); /* IE */
-		-moz-transform: scale(1.3); /* FF */
-		-webkit-transform: scale(1.3); /* Safari and Chrome */
-		-o-transform: scale(1.3); /* Opera */
-		transform: scale(1.3);
-		padding: 10px;
-	}
-
 	#search-container {
 		display: flex;
 		justify-content: center;
@@ -276,6 +266,12 @@
 	#search-options {
 		display: flex;
 		gap: 10px;
+	}
+
+	#search-options > div {
+		display: flex;
+		align-items: center;
+		gap: 3px;
 	}
 
 	.navbar {

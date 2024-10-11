@@ -21,6 +21,8 @@
 	let filteredSessions: any;
 	let displaySessions: any;
 
+	let sortAlphabetically: boolean;
+
 	const debounce = (callback: Function, wait = 300) => {
 		return (...args: any[]) => {
 			clearTimeout(timeout);
@@ -40,6 +42,10 @@
 					normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
 			  )
 			: scopedSessions;
+
+		if (sortAlphabetically) {
+			filteredSessions = filteredSessions.toSorted((a: any, b: any) => a.title.localeCompare(b.title));
+		}
 
 		displaySessions = filteredSessions.slice(0, FETCH_LIMIT);
 
@@ -123,15 +129,21 @@
 		<div>
 			<img src={logoUrl} class="logo" alt="JFR 2024" />
 		</div>
-		<div id="search-container">
-			<input
-				id="search"
-				type="text"
-				placeholder="Que recherchez-vous ?"
-				bind:this={searchInput}
-				on:input={onSearch}
-			/>
-			<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
+		<div id="filter-row">
+			<div id="search-container">
+				<input
+					id="search"
+					type="text"
+					placeholder="Que recherchez-vous ?"
+					bind:this={searchInput}
+					on:input={onSearch}
+				/>
+				<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
+			</div>
+			<div>
+				<input type="checkbox" id="alphabetic-sort" bind:checked={sortAlphabetically} on:change={onSearch} />
+				<label for="alphabetic-sort">Tri A-Z</label>
+			</div>
 		</div>
 
 		<nav class="navbar">
@@ -193,6 +205,25 @@
 	}
 	.logo:hover {
 		filter: drop-shadow(0 0 2em #646cffaa);
+	}
+
+	#filter-row {
+		display: flex;
+		align-items: baseline;
+		justify-content: center;
+		gap: 10px;
+		user-select: none;
+		flex-wrap: wrap;
+	}
+
+	#filter-row input[type="checkbox"] {
+		/* Double-sized Checkboxes */
+		-ms-transform: scale(1.3); /* IE */
+		-moz-transform: scale(1.3); /* FF */
+		-webkit-transform: scale(1.3); /* Safari and Chrome */
+		-o-transform: scale(1.3); /* Opera */
+		transform: scale(1.3);
+		padding: 10px;
 	}
 
 	#search-container {

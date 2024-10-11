@@ -20,10 +20,15 @@
 </script>
 
 <svelte:window on:scroll={handleOnScroll} />
-<button class="back-to-top" on:click={goTop} class:hidden>🔝</button>
+<button class="back-to-top" on:click={goTop} title="Back To Top" class:hidden>
+	<svg width="32px" height="32px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17 15L12 10L7 15" stroke="#000000" stroke-width="2.0" stroke-linecap="round" stroke-linejoin="round" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke: #e8e6e3;"></path> </g></svg>
+</button>
 
 <style>
 	.back-to-top {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		opacity: 1;
 		transition: opacity 0.5s, visibility 0.5s;
 		position: fixed;
@@ -38,6 +43,10 @@
 		padding: 0.05rem;
 		background-color: lightgray;
 		cursor: pointer;
+		min-width: 40px;
+		max-width: 40px;
+		min-height: 40px;
+		max-height: 40px;
 	}
 	.back-to-top.hidden {
 		opacity: 0;

@@ -22,6 +22,7 @@
 	let displaySessions: any;
 
 	let sortAlphabetically: boolean;
+	let onlyVideos: boolean;
 
 	const debounce = (callback: Function, wait = 300) => {
 		return (...args: any[]) => {
@@ -37,11 +38,19 @@
 		// await new Promise(r => setTimeout(r, 3000));
 
 		const scopedSessions = sessionsByDate[selectedDate];
-		filteredSessions = value
-			? scopedSessions.filter((x: any) =>
-					normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
-			  )
-			: scopedSessions;
+		if (onlyVideos) {
+			filteredSessions = value
+				? scopedSessions.filter((x: any) => x.picture &&
+						normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
+				  )
+				: scopedSessions.filter((x: any) => x.picture);
+		} else {
+			filteredSessions = value
+				? scopedSessions.filter((x: any) =>
+						normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
+				  )
+				: scopedSessions;
+		}
 
 		if (sortAlphabetically) {
 			filteredSessions = filteredSessions.toSorted((a: any, b: any) => a.title.localeCompare(b.title));
@@ -140,9 +149,15 @@
 				/>
 				<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
 			</div>
-			<div>
-				<input type="checkbox" id="alphabetic-sort" bind:checked={sortAlphabetically} on:change={onSearch} />
-				<label for="alphabetic-sort">Tri A-Z</label>
+			<div id="search-options">
+				<div>
+					<input type="checkbox" id="alphabetic-sort" bind:checked={sortAlphabetically} on:change={onSearch} />
+					<label for="alphabetic-sort">Tri A-Z</label>
+				</div>
+				<div>
+					<input type="checkbox" id="only-videos" bind:checked={onlyVideos} on:change={onSearch} />
+					<label for="only-videos">Seulement avec média</label>
+				</div>
 			</div>
 		</div>
 
@@ -256,6 +271,11 @@
 
 	.btn-delete-search:hover {
 		background-color: #3b3b3b;
+	}
+
+	#search-options {
+		display: flex;
+		gap: 10px;
 	}
 
 	.navbar {

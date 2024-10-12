@@ -108,6 +108,17 @@
 			}
 		}
 
+		if (eventDetail.vod && eventDetail.vod.media && eventDetail.vod.media.element && eventDetail.vod.media.element.sources) {
+			mediaList.push({
+				id: eventDetail.vod.media.id,
+				title: eventDetail.title,
+				url: eventDetail.vod.media.element.sources[0].uri,
+				thumbnail: eventDetail.vod.media.thumbnail,
+				start: eventDetail.start.split('T')[1].split('+')[0],
+				speakers: eventDetail.speakers.items
+			});
+		}
+
 		if (mediaList.length > 0) {
 			currentVideoTitle = mediaList[0].title + (mediaList[0].id ? '' : ' Ⓜ️');
 			currentSpeakers = mediaList[0].speakers;
@@ -165,7 +176,9 @@
 			</div>
 		</div>
 		<div class="playlist-container">
-			<div id="playlist-title"><strong>Liste de lecture ({mediaList.length}):</strong></div>
+			<div id="playlist-title">
+				<strong>Liste de lecture ({mediaList.length}):</strong>
+			</div>
 			<div class="playlist">
 				{#each mediaList as item}
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -398,6 +411,7 @@
 		border-top-right-radius: 4px;
 		padding: 8px 12px;
 		background-color: rgb(24, 26, 27);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 	}
 
 	.current-media {
@@ -408,9 +422,6 @@
 
 	#video-container {
 		display: flex;
-		border-left: 1px solid #bababa;
-		border-right: 1px solid #bababa;
-		border-bottom: 1px solid #bababa;
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
 		overflow: hidden;
@@ -419,8 +430,7 @@
 	}
 
 	video {
-		max-width: 100%;
-		/* height: calc(100% - 73px); */
+		width: 100%;
 	}
 
 	.playlist-container {
@@ -552,6 +562,7 @@
 
 		#current-media-info, #playlist-title {
 			background-color: #fdfdfd;
+			border-bottom: 1px solid #dddddd;
 		}
 
 		.objectives {

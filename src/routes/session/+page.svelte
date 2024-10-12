@@ -147,7 +147,7 @@
 	{#if !loading && eventDetail}
 	{#if mediaList.length > 0}
 	<div class="media">
-		<div class="video-container">
+		<div class="current-media">
 			<div id="current-media-info">
 				<div><strong>{currentVideoTitle ?? '😶‍🌫️'}</strong></div>
 				{#if currentSpeakers}
@@ -158,9 +158,11 @@
 				</div>
 				{/if}
 			</div>
-			<video controls class="video-player" src={currentVideoUrl}>
-				<track kind="captions" />
-			</video>
+			<div id="video-container">
+				<video controls class="video-player" src={currentVideoUrl}>
+					<track kind="captions" />
+				</video>
+			</div>
 		</div>
 		<div class="playlist-container">
 			<div id="playlist-title"><strong>Liste de lecture ({mediaList.length}):</strong></div>
@@ -398,19 +400,27 @@
 		background-color: rgb(24, 26, 27);
 	}
 
-	.video-container {
+	.current-media {
 		display: flex;
 		flex-direction: column;
 		flex-grow: 1;
-		/* Rounded corners for video */
-		border-radius: 5px;
+	}
+
+	#video-container {
+		display: flex;
+		border-left: 1px solid #bababa;
+		border-right: 1px solid #bababa;
+		border-bottom: 1px solid #bababa;
+		border-bottom-left-radius: 5px;
+		border-bottom-right-radius: 5px;
 		overflow: hidden;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
 	}
 
-	.video-player {
-		border: 1px solid #bababa;
+	video {
+		max-width: 100%;
+		/* height: calc(100% - 73px); */
 	}
 
 	.playlist-container {
@@ -495,12 +505,6 @@
 	img {
 		height: 100%;
 		object-fit: contain;
-	}
-
-	video {
-		margin: 0;
-		max-width: 100%;
-		height: calc(100% - 73px);
 	}
 
 	.btn-download {

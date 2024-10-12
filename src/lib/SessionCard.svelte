@@ -188,7 +188,7 @@
 	}
 
 	.thumbnail {
-		filter: grayscale(1);
+		/* filter: grayscale(1); */
 		-o-object-fit: contain;
 		object-fit: contain;
 		max-width: 100%;

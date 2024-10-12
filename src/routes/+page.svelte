@@ -15,6 +15,7 @@
 	let loading = true;
 	let timeout: ReturnType<typeof setTimeout>;
 
+	let showClearSearch: boolean;
 	let sortAlphabetically: boolean;
 	let onlyVideos: boolean;
 	let selectedDate: string = '';
@@ -69,6 +70,7 @@
 	};
 
 	const onSearch = async () => {
+		showClearSearch = searchInput.value?.length > 0;
 		loading = true;
 		debounce(searchSessions).call(null, searchInput.value);
 	};
@@ -111,6 +113,7 @@
 
 	onMount(async () => {
 		searchInput.value = $filterOptions.filterKeyword;
+		showClearSearch = searchInput.value?.length > 0;
 		sortAlphabetically = $filterOptions.sortAlphabetically;
 		onlyVideos = $filterOptions.onlyVideos;
 		selectedDate = $filterOptions.selectedDate;
@@ -159,7 +162,11 @@
 					bind:this={searchInput}
 					on:input={onSearch}
 				/>
-				<button class="btn-delete-search" on:click={onDeleteSearch}>❌</button>
+				<button class="btn-delete-search" title="Effacer" on:click={onDeleteSearch} style="visibility: {showClearSearch ? 'visible': 'hidden'};">
+					<svg focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path fill="#b3b3b3" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+					</svg>
+				</button>
 			</div>
 			<div id="search-options">
 				<div>
@@ -249,26 +256,46 @@
 	#search-container {
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		margin-top: 0.5rem;
 	}
 
 	#search {
 		height: 24px;
 		padding: 6px 12px;
+		padding-left: 2.25em;
+		padding-right: 2.25em;
 		font-size: 16px;
 		min-width: 300px;
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOSIgaGVpZ2h0PSIxOSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZmlsbD0iI2IzYjNiMyIgZD0ibTE3LjYzMiAxNi45NTUtNC43NjEtNC43NjJhNi42MTQgNi42MTQgMCAwIDAgMS43OTUtNC41MjcgNi42NTYgNi42NTYgMCAwIDAtNi42NDktNi42NDkgNi42NTUgNi42NTUgMCAwIDAtNi42NDkgNi42NDggNi42NTQgNi42NTQgMCAwIDAgNi42NDkgNi42NDcgNi42MTMgNi42MTMgMCAwIDAgMy43NS0xLjE2NGw0LjgzNCA0LjgzNCAxLjAzMS0xLjAyN3pNMi44MjQgNy42NjZhNS4xOTggNS4xOTggMCAwIDEgNS4xOTItNS4xOTIgNS4xOTcgNS4xOTcgMCAwIDEgNS4xOTIgNS4xOTIgNS4xOTggNS4xOTggMCAwIDEtNS4xOTIgNS4xOTEgNS4yIDUuMiAwIDAgMS01LjE5Mi01LjE5MXoiLz48L3N2Zz4=);
+		background-position: .65em;
+		background-repeat: no-repeat;
+		background-size: auto 47.5%;
+		border: 1px solid #858585;
+		outline: none;
+		border-radius: 4px;
+		background-color: #1b1b1b;
+	}
+
+	#search::placeholder {
+		color: #b3b3b3;
 	}
 
 	.btn-delete-search {
-		border: 1px solid #11d7f2;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: none;
 		border-left: none;
+		border-radius: 50%;
 		outline: none;
 		background-color: transparent;
-		min-width: 40px;
-		max-width: 40px;
-		border-top-right-radius: 5px;
-		border-bottom-right-radius: 5px;
+		min-width: 32px;
+		max-width: 32px;
+		min-height: 32px;
+		max-height: 32px;
 		cursor: pointer;
+		margin-left: -2.5em;
 	}
 
 	.btn-delete-search:hover {
@@ -346,6 +373,15 @@
 		.btn-delete-search:hover {
 			background-color: #ffffff;
 		}
+
+		#search {
+			background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOSIgaGVpZ2h0PSIxOSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZmlsbD0iIzY2NiIgZD0ibTE3LjYzMiAxNi45NTUtNC43NjEtNC43NjJhNi42MTQgNi42MTQgMCAwIDAgMS43OTUtNC41MjcgNi42NTYgNi42NTYgMCAwIDAtNi42NDktNi42NDkgNi42NTUgNi42NTUgMCAwIDAtNi42NDkgNi42NDggNi42NTQgNi42NTQgMCAwIDAgNi42NDkgNi42NDcgNi42MTMgNi42MTMgMCAwIDAgMy43NS0xLjE2NGw0LjgzNCA0LjgzNCAxLjAzMS0xLjAyN3pNMi44MjQgNy42NjZhNS4xOTggNS4xOTggMCAwIDEgNS4xOTItNS4xOTIgNS4xOTcgNS4xOTcgMCAwIDEgNS4xOTIgNS4xOTIgNS4xOTggNS4xOTggMCAwIDEtNS4xOTIgNS4xOTEgNS4yIDUuMiAwIDAgMS01LjE5Mi01LjE5MXoiLz48L3N2Zz4=);
+			background-color: #fff;
+		}
+
+		#search::placeholder {
+			color: #666;
+		}
 	}
 
 	@media (max-width: 1000px) {
@@ -360,6 +396,10 @@
 			padding-left: 1rem;
 			padding-right: 1rem;
 			width: unset;
+		}
+
+		#search-container {
+			flex: 1;
 		}
 	}
 

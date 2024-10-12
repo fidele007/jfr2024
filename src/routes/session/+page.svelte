@@ -174,6 +174,54 @@
 					<track kind="captions" />
 				</video>
 			</div>
+			<div class="detail screen-big" style="border-left-color: {eventDetail.sessionTypeColor}">
+				<div class="session-header">
+					<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
+					<h1>{eventDetail.title}</h1>
+					<div class="date-time subtitle">
+						<div>
+							🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
+						</div>
+						<div>
+							🕣 {eventDetail.start.split('T')[1].split('+')[0] +
+								' - ' +
+								eventDetail.end.split('T')[1].split('+')[0]}
+						</div>
+					</div>
+				</div>
+				{#if objectives}
+				<div class="objectives">
+					<strong>Objectifs :</strong>
+					<div>
+						{@html objectives}
+					</div>
+				</div>
+				{/if}
+				{#if moderators || responsables}
+				<table class="person-list">
+					{#if moderators}
+					<tr>
+						<td class="role-label">Modérateur :</td>
+						<td>
+							{#each moderators as person}
+							<Person info={person} />
+							{/each}
+						</td>
+					</tr>
+					{/if}
+					{#if responsables}
+					<tr>
+						<td class="role-label">Responsable :</td>
+						<td>
+							{#each responsables as person}
+							<Person info={person} />
+							{/each}
+						</td>
+					</tr>
+					{/if}
+				</table>
+				{/if}
+			</div>
 		</div>
 		<div class="playlist-container">
 			<div id="playlist-title">
@@ -230,7 +278,7 @@
 		</div>
 	</div>
 	{/if}
-	<div class="detail" style="border-left-color: {eventDetail.sessionTypeColor}">
+	<div class="detail screen-small" style="border-left-color: {eventDetail.sessionTypeColor}">
 		<div class="session-header">
 			<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
 			<h1>{eventDetail.title}</h1>
@@ -326,7 +374,7 @@
 	}
 
 	.detail {
-		display: flex;
+		display: none;
 		flex-direction: column;
 		flex-grow: 0;
 		gap: 10px;
@@ -552,6 +600,25 @@
 
 		img {
 			height: 85%;
+		}
+
+		.detail.screen-small {
+			display: flex;
+		}
+
+		.detail.screen-big {
+			display: none;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		.detail.screen-small {
+			display: none;
+		}
+
+		.detail.screen-big {
+			display: flex;
+			margin-top: 10px;
 		}
 	}
 

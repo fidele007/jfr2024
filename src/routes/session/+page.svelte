@@ -3,7 +3,7 @@
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import { getFriendlyDate, sanitizeFilename } from '$lib/Constants.svelte';
+	import { getFriendlyDate, getTimeEmoji, sanitizeFilename } from '$lib/Constants.svelte';
 	import Person from '$lib/Person.svelte';
 
 	const searchParams = browser && $page.url.searchParams;
@@ -184,7 +184,7 @@
 							🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
 						</div>
 						<div>
-							🕣 {eventDetail.start.split('T')[1].split('+')[0] +
+							{getTimeEmoji(eventDetail.start.split('T')[1].split('+')[0])} {eventDetail.start.split('T')[1].split('+')[0] +
 								' - ' +
 								eventDetail.end.split('T')[1].split('+')[0]}
 						</div>
@@ -243,7 +243,7 @@
 						<div class="video-details">
 							<div class="media-title"><strong>{item.title}{item.id ? '' : ' Ⓜ️'}</strong></div>
 							<div class="subtitle">
-								<span>🕣 {item.start}</span>
+								<span>{getTimeEmoji(item.start)} {item.start}</span>
 								<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
 									<svg
 										width="16"
@@ -288,7 +288,7 @@
 					🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
 				</div>
 				<div>
-					🕣 {eventDetail.start.split('T')[1].split('+')[0] +
+					{getTimeEmoji(eventDetail.start.split('T')[1].split('+')[0])} {eventDetail.start.split('T')[1].split('+')[0] +
 						' - ' +
 						eventDetail.end.split('T')[1].split('+')[0]}
 				</div>

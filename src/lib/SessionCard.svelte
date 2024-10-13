@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	import { getFriendlyDate } from './Constants.svelte';
+	import { getFriendlyDate, getTimeEmoji } from './Constants.svelte';
 
 	export let info: any;
 
@@ -48,7 +48,7 @@
 				<div class="date-time subtitle">
 					<div>🗓️ {getFriendlyDate(info.start.split('T')[0])}</div>
 					<div>
-						🕣 {info.start.split('T')[1].split('+')[0] + ' - ' + info.end.split('T')[1].split('+')[0]}
+						{getTimeEmoji(info.start.split('T')[1].split('+')[0])} {info.start.split('T')[1].split('+')[0] + ' - ' + info.end.split('T')[1].split('+')[0]}
 					</div>
 				</div>
 			</div>

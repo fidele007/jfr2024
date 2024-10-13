@@ -19,9 +19,7 @@
 	let moderators: [any];
 	let responsables: [any];
 
-	let currentVideoTitle: string;
-	let currentSpeakers: [any] | null;
-	let currentVideoUrl: string;
+	let currentMedia: any;
 
 	let mediaList: {
 		id: string | null;
@@ -41,10 +39,8 @@
 		return http.status != 404;
 	};
 
-	const onClickPlaylistItem = (title: string, url: string, speakers: [any] | null) => {
-		currentVideoTitle = title;
-		currentSpeakers = speakers;
-		currentVideoUrl = url;
+	const onClickPlaylistItem = (media: any) => {
+		currentMedia = media;
 	};
 
 	const onDownload = (title: string, url: string) => {
@@ -79,7 +75,7 @@
 			if (item.vod && item.vod.media && item.vod.media.element && item.vod.media.element.sources) {
 				mediaList.push({
 					id: item.vod.media.id,
-					title: item.title,
+					title: item.vod.media.id ? item.title : `${item.title} Ⓜ️`,
 					url: item.vod.media.element.sources[0].uri,
 					thumbnail: item.vod.media.thumbnail,
 					start: item.start.split('T')[1].split('+')[0],
@@ -121,12 +117,8 @@
 		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
 
 		if (mediaList.length > 0) {
-			currentVideoTitle = mediaList[0].title + (mediaList[0].id ? '' : ' Ⓜ️');
-			currentSpeakers = mediaList[0].speakers;
-			currentVideoUrl = mediaList[0].url;
+			currentMedia = mediaList[0];
 		}
-
-		console.log(mediaList);
 
 		loading = false;
 	});
@@ -161,17 +153,17 @@
 	<div class="media">
 		<div class="current-media">
 			<div id="current-media-info">
-				<div><strong>{currentVideoTitle ?? '😶‍🌫️'}</strong></div>
-				{#if currentSpeakers}
+				<div><strong>{currentMedia.title ?? '😶‍🌫️'}</strong></div>
+				{#if currentMedia.speakers}
 				<div class="speakers">
-					{#each currentSpeakers as speaker}
+					{#each currentMedia.speakers as speaker}
 					<Person info={speaker} />
 					{/each}
 				</div>
 				{/if}
 			</div>
 			<div id="video-container">
-				<video controls class="video-player" src={currentVideoUrl}>
+				<video controls class="video-player" src={currentMedia.url} poster={currentMedia.thumbnail}>
 					<track kind="captions" />
 				</video>
 			</div>
@@ -233,15 +225,15 @@
 					<!-- svelte-ignore a11y-click-events-have-key-events -->
 					<!-- svelte-ignore a11y-no-static-element-interactions -->
 					<div
-						class="playlist-item {item.url == currentVideoUrl ? 'selected' : ''}"
-						on:click={() => onClickPlaylistItem(item.title, item.url, item.speakers)}
-						title={item.title}{item.id ? '' : ' Ⓜ️'}
+						class="playlist-item {item == currentMedia ? 'selected' : ''}"
+						on:click={() => onClickPlaylistItem(item)}
+						title={item.title}
 					>
 						<div class="thumbnail-container">
 							<img class="thumbnail" src={item.thumbnail} alt={item.title} />
 						</div>
 						<div class="video-details">
-							<div class="media-title"><strong>{item.title}{item.id ? '' : ' Ⓜ️'}</strong></div>
+							<div class="media-title"><strong>{item.title}</strong></div>
 							<div class="subtitle">
 								<span>{getTimeEmoji(item.start)} {item.start}</span>
 								<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
@@ -475,9 +467,7 @@
 		overflow: hidden;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
-		border-left: 1px solid;
-		border-right: 1px solid;
-		border-bottom: 1px solid;
+		border: 1px solid;
 		border-color: rgb(24, 26, 27);
 		min-height: 411px;
 	}

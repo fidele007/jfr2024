@@ -479,7 +479,7 @@
 		border-right: 1px solid;
 		border-bottom: 1px solid;
 		border-color: rgb(24, 26, 27);
-		min-height: 480px;
+		min-height: 411px;
 	}
 
 	video {

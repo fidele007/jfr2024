@@ -44,7 +44,6 @@
 	const onClickPlaylistItem = (title: string, url: string, speakers: [any] | null) => {
 		currentVideoTitle = title;
 		currentSpeakers = speakers;
-		console.log(currentSpeakers);
 		currentVideoUrl = url;
 	};
 
@@ -476,6 +475,10 @@
 		overflow: hidden;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
+		border-left: 1px solid;
+		border-right: 1px solid;
+		border-bottom: 1px solid;
+		border-color: rgb(24, 26, 27);
 		min-height: 480px;
 	}
 
@@ -636,6 +639,10 @@
 		#current-media-info, #playlist-title {
 			background-color: #fdfdfd;
 			border-bottom: 1px solid #dddddd;
+		}
+
+		#video-container {
+			border-color: #fdfdfd;
 		}
 
 		.objectives {

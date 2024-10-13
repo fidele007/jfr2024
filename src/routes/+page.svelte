@@ -344,7 +344,7 @@
 		flex: 1;
 		justify-content: center;
 		display: inline-flex;
-		color: #ffffff;
+		color: #fff;
 		text-decoration: none;
 		padding: 15px;
 		position: relative;
@@ -353,6 +353,11 @@
 	.navbar .menu li:hover,
 	.navbar .menu li.selected {
 		background-color: #11d7f2;
+	}
+
+	.navbar .menu li:hover a,
+	.navbar .menu li.selected a {
+		color: #1C274C;
 	}
 
 	.card-container {

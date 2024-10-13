@@ -24,6 +24,7 @@
 	let mediaList: {
 		id: string | null;
 		title: string;
+		hdUrl: string;
 		url: string;
 		thumbnail: string;
 		start: string;
@@ -41,6 +42,14 @@
 
 	const onClickPlaylistItem = (media: any) => {
 		currentMedia = media;
+	};
+
+	const getBestMediaSource = (media: any) => {
+		if (screen.width <= 1024 && media.url) {
+			return media.url;
+		}
+
+		return media.hdUrl;
 	};
 
 	const onDownload = (title: string, url: string) => {
@@ -76,7 +85,8 @@
 				mediaList.push({
 					id: item.vod.media.id,
 					title: item.vod.media.id ? item.title : `${item.title} Ⓜ️`,
-					url: item.vod.media.element.sources[0].uri,
+					hdUrl: item.vod.media.element.sources[0].uri,
+					url: item.vod.media.element.sources[1]?.uri,
 					thumbnail: item.vod.media.thumbnail,
 					start: item.start.split('T')[1].split('+')[0],
 					speakers: item.speakers.items
@@ -88,7 +98,8 @@
 			mediaList.push({
 				id: eventDetail.vod.media.id,
 				title: eventDetail.vod.media.title ?? '[Sans titre]',
-				url: eventDetail.vod.media.element.sources[0].uri,
+				hdUrl: eventDetail.vod.media.element.sources[0].uri,
+				url: eventDetail.vod.media.element.sources[1]?.uri,
 				thumbnail: eventDetail.vod.media.thumbnail,
 				start: eventDetail.start.split('T')[1].split('+')[0],
 				speakers: eventDetail.speakers.items
@@ -98,20 +109,29 @@
 		// Check and add hidden media
 		if (eventDetail.picture) {
 			// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
-			const possibleVideoUrl =
-				eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
+			const hiddenMedia: any = {
+				id: null,
+				title: '[Non répertoriée]',
+				thumbnail: eventDetail.picture,
+				start: eventDetail.start.split('T')[1].split('+')[0],
+				speakers: null
+			};
 
-			const urlAlreadyIncluded = mediaList.some((item) => item.url === possibleVideoUrl);
-			if (!urlAlreadyIncluded && fileExists(possibleVideoUrl)) {
-				mediaList.push({
-					id: null,
-					title: '[Non répertoriée]',
-					url: possibleVideoUrl,
-					thumbnail: eventDetail.picture,
-					start: eventDetail.start.split('T')[1].split('+')[0],
-					speakers: null
-				});
+			const possibleHDVideoUrl =
+				eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
+			const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && fileExists(possibleHDVideoUrl);
+			if (addHdUrl) {
+				hiddenMedia.hdUrl = possibleHDVideoUrl;
 			}
+
+			const possibleVideoUrl =
+				eventDetail.picture.split('/video/')[0] + '/video/y_480p_800kb.mp4';
+			const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && fileExists(possibleVideoUrl);
+			if (addUrl) {
+				hiddenMedia.url = possibleVideoUrl;
+			}
+
+			mediaList.push(hiddenMedia);
 		}
 
 		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
@@ -163,7 +183,7 @@
 				{/if}
 			</div>
 			<div id="video-container">
-				<video controls class="video-player" src={currentMedia.url} poster={currentMedia.thumbnail}>
+				<video controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail}>
 					<track kind="captions" />
 				</video>
 			</div>

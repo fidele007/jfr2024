@@ -271,7 +271,7 @@
 		</div>
 	</div>
 	{/if}
-	<div class="detail screen-small" style="border-left-color: {eventDetail.sessionTypeColor}">
+	<div class="detail screen-small {mediaList.length == 0 ? 'no-media' : ''}" style="border-left-color: {eventDetail.sessionTypeColor}">
 		<div class="session-header">
 			<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
 			<h1>{eventDetail.title}</h1>
@@ -367,7 +367,6 @@
 	}
 
 	.detail {
-		display: none;
 		flex-direction: column;
 		flex-grow: 0;
 		gap: 10px;
@@ -611,7 +610,7 @@
 	}
 
 	@media (min-width: 1000px) {
-		.detail.screen-small {
+		.detail.screen-small:not(.no-media) {
 			display: none;
 		}
 

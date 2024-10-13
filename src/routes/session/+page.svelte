@@ -89,6 +89,17 @@
 			}
 		}
 
+		if (eventDetail.vod && eventDetail.vod.media && eventDetail.vod.media.element && eventDetail.vod.media.element.sources) {
+			mediaList.push({
+				id: eventDetail.vod.media.id,
+				title: eventDetail.vod.media.title ?? '[Sans titre]',
+				url: eventDetail.vod.media.element.sources[0].uri,
+				thumbnail: eventDetail.vod.media.thumbnail,
+				start: eventDetail.start.split('T')[1].split('+')[0],
+				speakers: eventDetail.speakers.items
+			});
+		}
+
 		// Check and add hidden media
 		if (eventDetail.picture) {
 			// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
@@ -108,16 +119,7 @@
 			}
 		}
 
-		if (eventDetail.vod && eventDetail.vod.media && eventDetail.vod.media.element && eventDetail.vod.media.element.sources) {
-			mediaList.push({
-				id: eventDetail.vod.media.id,
-				title: eventDetail.title,
-				url: eventDetail.vod.media.element.sources[0].uri,
-				thumbnail: eventDetail.vod.media.thumbnail,
-				start: eventDetail.start.split('T')[1].split('+')[0],
-				speakers: eventDetail.speakers.items
-			});
-		}
+		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
 
 		if (mediaList.length > 0) {
 			currentVideoTitle = mediaList[0].title + (mediaList[0].id ? '' : ' Ⓜ️');

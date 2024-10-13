@@ -449,7 +449,6 @@
 		gap: 15px;
 		flex-grow: 1;
 		width: 100%;
-		overflow-y: hidden;
 		min-height: 469px;
 	}
 
@@ -477,6 +476,7 @@
 		overflow: hidden;
 		transform: translateZ(0);
 		-webkit-transform: translateZ(0);
+		min-height: 480px;
 	}
 
 	video {
@@ -610,6 +610,10 @@
 
 		.detail.screen-big {
 			display: none;
+		}
+
+		#video-container {
+			min-height: unset;
 		}
 	}
 

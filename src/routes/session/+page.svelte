@@ -131,7 +131,9 @@
 				hiddenMedia.url = possibleVideoUrl;
 			}
 
-			mediaList.push(hiddenMedia);
+			if (hiddenMedia.hdUrl || hiddenMedia.url) {
+				mediaList.push(hiddenMedia);
+			}
 		}
 
 		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))

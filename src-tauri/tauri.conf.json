@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "jfr2024",
+  "productName": "JFR 2024",
   "version": "0.1.0",
-  "identifier": "com.tauri.dev",
+  "identifier": "com.fidele007.jfr2024",
   "build": {
     "frontendDist": "../build",
     "devUrl": "http://localhost:5173",

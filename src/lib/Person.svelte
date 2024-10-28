@@ -2,15 +2,18 @@
 	import { base } from "$app/paths";
 
 	export let info: any;
+	export let minimal: boolean = false;
 </script>
 
 <div class="person">
+	{#if !minimal}
 	<div class="person-avatar">
 		<img class="avatar-image" src={info.photo?.url ?? `${base}/avatar_placeholder.png`} alt={info.firstName} />
 	</div>
-	<div class="person-info">
+	{/if}
+	<div class="person-info" class:minimal={minimal}>
 		<div class="person-name">{`${info.firstName} ${info.lastName}`}</div>
-		<div class="person-location">{`${info.city.name}, ${info.country.name}`}</div>
+		<div class="person-location">{minimal ? '(' : ''}{`${info.city.name}, ${info.country.name}`}{minimal ? ')' : ''}</div>
 	</div>
 </div>
 
@@ -34,6 +37,12 @@
 	.person {
 		display: flex;
 		gap: 8px;
+	}
+
+	.person-info.minimal {
+		display: flex;
+		align-items: baseline;
+    	gap: 3px;
 	}
 
 	.person-name {

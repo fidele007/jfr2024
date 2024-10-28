@@ -280,9 +280,9 @@
 								</button>
 							</div>
 							{#if item.speakers}
-							<div class="speakers">
+							<div class="speakers" class:vertical={item.speakers.length > 2}>
 								{#each item.speakers as speaker}
-								<Person info={speaker} />
+								<Person info={speaker} minimal={item.speakers.length > 2} />
 								{/each}
 							</div>
 							{/if}
@@ -563,6 +563,11 @@
 		display: flex;
 		gap: 10px;
 		flex-wrap: wrap;
+	}
+
+	.speakers.vertical {
+		flex-direction: column;
+		gap: 0;
 	}
 
 	.thumbnail-container {

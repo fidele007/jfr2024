@@ -151,7 +151,7 @@
 </svelte:head>
 
 <main>
-	<a href="{base}/" class="one-liner" on:click|preventDefault={() => history.back()}>
+	<a href="{base}/" class="one-liner">
 		<i class="gg-chevron-left" /> Retour
 	</a>
 

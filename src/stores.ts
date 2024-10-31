@@ -6,3 +6,5 @@ export const filterOptions = localStore("filter-options", {
 	onlyVideos: false,
 	selectedDate: ''
 });
+
+export const mediaHistory = localStore("media-history", []);

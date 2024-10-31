@@ -4,7 +4,11 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import { getFriendlyDate, getTimeEmoji, sanitizeFilename } from '$lib/Constants.svelte';
+	import Speakers from '$lib/Speakers.svelte';
 	import Person from '$lib/Person.svelte';
+	import { mediaHistory } from '../../stores';
+
+	const MEDIA_HISTORY_LIMIT = 25;
 
 	const searchParams = browser && $page.url.searchParams;
 	let sessionId: string | null;
@@ -144,6 +148,19 @@
 
 		loading = false;
 	});
+
+
+	const onMediaPlay = (media: any) => {
+		while ($mediaHistory.length >= MEDIA_HISTORY_LIMIT) {
+			$mediaHistory.pop();
+		}
+
+		console.log("onMediaPlay", media);
+		media["sessionId"] = sessionId;
+		media["sessionTitle"] = eventDetail.title;
+
+		$mediaHistory.unshift(media);
+	}
 </script>
 
 <svelte:head>
@@ -185,7 +202,7 @@
 				{/if}
 			</div>
 			<div id="video-container">
-				<video controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail}>
+				<video controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)}>
 					<track kind="captions" />
 				</video>
 			</div>
@@ -280,11 +297,7 @@
 								</button>
 							</div>
 							{#if item.speakers}
-							<div class="speakers" class:vertical={item.speakers.length > 2}>
-								{#each item.speakers as speaker}
-								<Person info={speaker} minimal={item.speakers.length > 2} />
-								{/each}
-							</div>
+							<Speakers speakers={item.speakers} />
 							{/if}
 						</div>
 					</div>
@@ -557,17 +570,6 @@
 	.video-details {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.speakers {
-		display: flex;
-		gap: 10px;
-		flex-wrap: wrap;
-	}
-
-	.speakers.vertical {
-		flex-direction: column;
-		gap: 0;
 	}
 
 	.thumbnail-container {

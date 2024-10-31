@@ -1,10 +1,18 @@
 <script lang="ts">
+	import Person from '$lib/Person.svelte';
+	import { mediaHistory } from "../stores";
+	import Speakers from './Speakers.svelte';
+
 	export let showModal: boolean;
 
 	let dialog: HTMLDialogElement;
 
 	$: {
 		if (showModal) dialog.showModal();
+	}
+
+	const onClickMedia = (media: any) => {
+		console.log("Clicked media", media);
 	}
 </script>
 
@@ -24,7 +32,32 @@
 		</div>
 		<hr />
 		<div id="dialog-body">
+			{#if $mediaHistory.length == 0}
 			<div id="placeholder">🙂‍↔️ Vous n'avez pas d'historique.</div>
+			{/if}
+			{#each $mediaHistory as item}
+			<div
+				on:click={() => onClickMedia(item)} on:keydown={(e) => e.key === 'Enter' && onClickMedia(item)}
+				title={item.title}
+				role="link"
+				tabindex="0"
+			>
+				<div class="thumbnail-container">
+					<img class="thumbnail" src={item.thumbnail} alt={item.title} />
+				</div>
+				<div class="video-details">
+					<div class="session-title">
+						<strong>{item.sessionTitle}</strong>
+					</div>
+					<div class="media-title">
+						<strong>{item.title}</strong>
+					</div>
+					{#if item.speakers}
+					<Speakers speakers={item.speakers} />
+					{/if}
+				</div>
+			</div>
+			{/each}
 		</div>
 	</div>
 </dialog>
@@ -106,5 +139,39 @@
 		dialog {
 			background-color: #363062;
 		}
+	}
+	.session-title, .media-title {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: box;
+		font-size: 14px;
+		line-clamp: 2;
+		line-height: 1rem;
+		max-height: 2rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+    	display: -webkit-box;
+	}
+
+	.video-details {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.thumbnail-container {
+		display: flex;
+		height: 100px;
+		align-self: center;
+		align-items: center;
+	}
+
+	.thumbnail {
+		border-radius: 2px;
+	}
+
+	img {
+		height: 100%;
+		object-fit: contain;
 	}
 </style>

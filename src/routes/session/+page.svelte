@@ -7,13 +7,18 @@
 	import Speakers from '$lib/Speakers.svelte';
 	import Person from '$lib/Person.svelte';
 	import { mediaHistory } from '../../stores';
+	import MediaCard from '$lib/MediaCard.svelte';
+	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 
 	const MEDIA_HISTORY_LIMIT = 25;
 
 	const searchParams = browser && $page.url.searchParams;
 	let sessionId: string | null;
+	let selectedMediaUrl: string | null;
+
 	if (searchParams) {
 		sessionId = searchParams.get('id');
+		selectedMediaUrl = searchParams.get('selectedMediaUrl');
 	}
 
 	let loading = true;
@@ -44,10 +49,6 @@
 		return http.status != 404;
 	};
 
-	const onClickPlaylistItem = (media: any) => {
-		currentMedia = media;
-	};
-
 	const getBestMediaSource = (media: any) => {
 		if (screen.width <= 1024 && media.url) {
 			return media.url;
@@ -55,21 +56,6 @@
 
 		return media.hdUrl;
 	};
-
-	const onDownload = (title: string, url: string) => {
-		const anchor = document.createElement("a");
-		anchor.href = url;
-
-		const urlSplit = url.split(".");
-		const fileExtension = "." + urlSplit[urlSplit.length - 1];
-		anchor.download = sanitizeFilename(title) + fileExtension;
-
-		anchor.target = "_blank";
-
-		document.body.appendChild(anchor);
-		anchor.click();
-		document.body.removeChild(anchor);
-	}
 
 	onMount(async () => {
 		// await new Promise(r => setTimeout(r, 3000));
@@ -143,7 +129,13 @@
 		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
 
 		if (mediaList.length > 0) {
-			currentMedia = mediaList[0];
+			if (selectedMediaUrl) {
+				currentMedia = mediaList.find((item) => item.hdUrl === selectedMediaUrl);
+			}
+
+			if (!currentMedia) {
+				currentMedia = mediaList[0];
+			}
 		}
 
 		loading = false;
@@ -151,15 +143,14 @@
 
 
 	const onMediaPlay = (media: any) => {
-		while ($mediaHistory.length >= MEDIA_HISTORY_LIMIT) {
-			$mediaHistory.pop();
-		}
+		const filteredArray = $mediaHistory.filter((item: any) => item.hdUrl !== media.hdUrl);
 
-		console.log("onMediaPlay", media);
+		// console.log("onMediaPlay", media);
 		media["sessionId"] = sessionId;
 		media["sessionTitle"] = eventDetail.title;
+		media["sessionTypeColor"] = eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
 
-		$mediaHistory.unshift(media);
+		$mediaHistory = [media, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
 	}
 </script>
 
@@ -168,9 +159,12 @@
 </svelte:head>
 
 <main>
-	<a href="{base}/" class="one-liner">
-		<i class="gg-chevron-left" /> Retour
-	</a>
+	<div id="navbar">
+		<a href="{base}/" class="one-liner">
+			<i class="gg-chevron-left" /> Retour
+		</a>
+		<MediaHistoryButton />
+	</div>
 
 	{#if loading}
 	<div class="DNA_cont">
@@ -194,11 +188,7 @@
 			<div id="current-media-info">
 				<div><strong>{currentMedia.title ?? '😶‍🌫️'}</strong></div>
 				{#if currentMedia.speakers}
-				<div class="speakers">
-					{#each currentMedia.speakers as speaker}
-					<Person info={speaker} />
-					{/each}
-				</div>
+				<Speakers speakers={currentMedia.speakers} />
 				{/if}
 			</div>
 			<div id="video-container">
@@ -261,46 +251,7 @@
 			</div>
 			<div class="playlist">
 				{#each mediaList as item}
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<!-- svelte-ignore a11y-no-static-element-interactions -->
-					<div
-						class="playlist-item {item == currentMedia ? 'selected' : ''}"
-						on:click={() => onClickPlaylistItem(item)}
-						title={item.title}
-					>
-						<div class="thumbnail-container">
-							<img class="thumbnail" src={item.thumbnail} alt={item.title} />
-						</div>
-						<div class="video-details">
-							<div class="media-title"><strong>{item.title}</strong></div>
-							<div class="subtitle">
-								<span>{getTimeEmoji(item.start)} {item.start}</span>
-								<button type="button" title="Télécharger" class="btn-download" on:click={() => onDownload(item.title, item.url)}>
-									<svg
-										width="16"
-										height="16"
-										viewBox="0 0 24 24"
-										fill="none"
-										class="svg-icon"
-										xmlns="http://www.w3.org/2000/svg"
-									>
-										<path
-											d="M11 5C11 4.44772 11.4477 4 12 4C12.5523 4 13 4.44772 13 5V12.1578L16.2428 8.91501L17.657 10.3292L12.0001 15.9861L6.34326 10.3292L7.75748 8.91501L11 12.1575V5Z"
-											fill="currentColor"
-										/>
-										<path
-											d="M4 14H6V18H18V14H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V14Z"
-											fill="currentColor"
-										/>
-									</svg>
-									<div>Télécharger</div>
-								</button>
-							</div>
-							{#if item.speakers}
-							<Speakers speakers={item.speakers} />
-							{/if}
-						</div>
-					</div>
+				<MediaCard media={item} downloadable={true} bind:currentMedia={currentMedia} />
 				{/each}
 			</div>
 		</div>
@@ -360,6 +311,12 @@
 <style>
 	* {
 		box-sizing: border-box;
+	}
+
+	#navbar {
+		display: flex;
+		justify-content: space-between;
+		width: 100%;
 	}
 
 	.one-liner {
@@ -480,7 +437,6 @@
 	#current-media-info, #playlist-title {
 		display: flex;
 		flex-direction: column;
-		gap: 5px;
 		border-top-left-radius: 4px;
 		border-top-right-radius: 4px;
 		padding: 8px 12px;
@@ -527,81 +483,6 @@
 		padding: 5px;
 	}
 
-	.playlist .playlist-item:first-child {
-		border-top-left-radius: 2px;
-		border-top-right-radius: 2px;
-	}
-
-	.playlist .playlist-item:last-child {
-		border-bottom-left-radius: 2px;
-		border-bottom-right-radius: 2px;
-	}
-
-	.playlist-item {
-		display: flex;
-		gap: 10px;
-		padding: 5px;
-		cursor: pointer;
-	}
-
-	.playlist-item.selected,
-	.playlist-item:hover {
-		background-color: rgb(33, 36, 37);
-	}
-
-	.playlist-item.selected {
-		border-left: 3px solid blueviolet;
-	}
-
-	.media-title {
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		display: box;
-		font-size: 14px;
-		line-clamp: 2;
-		line-height: 1rem;
-		max-height: 2rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: normal;
-    	display: -webkit-box;
-	}
-
-	.video-details {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.thumbnail-container {
-		display: flex;
-		height: 100px;
-		align-self: center;
-		align-items: center;
-	}
-
-	.thumbnail {
-		border-radius: 2px;
-	}
-
-	img {
-		height: 100%;
-		object-fit: contain;
-	}
-
-	.btn-download {
-		display: flex;
-		align-items: center;
-		border-radius: 5px;
-		border: none;
-		background-color: transparent;
-		height: 24px;
-
-		&:hover {
-			color: white;
-			background-color: #0077FF;
-		}
-	}
-
 	@media (max-width: 1000px) {
 		main {
 			max-height: fit-content;
@@ -619,10 +500,6 @@
 
 		.playlist {
 			max-height: 450px;
-		}
-
-		img {
-			height: 85%;
 		}
 
 		.detail.screen-small {
@@ -666,19 +543,6 @@
 		.objectives {
 			color: #545454;
 			background-color: #fdfdfd;
-		}
-
-		.playlist-item {
-			background-color: #fff;
-		}
-
-		.playlist-item.selected,
-		.playlist-item:hover {
-			background-color: #d1d1d1;
-		}
-
-		.playlist-item.selected {
-			border-left: 3px solid blueviolet;
 		}
 	}
 </style>

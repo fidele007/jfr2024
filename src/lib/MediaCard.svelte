@@ -1,13 +1,18 @@
 <script lang="ts">
 	import { getTimeEmoji, sanitizeFilename } from './Constants.svelte';
 	import Speakers from './Speakers.svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	export let media: any;
-	export let downloadable: boolean;
-	export let selected: boolean;
+	export let currentMedia: any = null;
+	export let downloadable: boolean = false;
+	export let showTime: boolean = true;
 
 	const onClickMedia = (media: any) => {
-		console.log('On click media', media);
+		currentMedia = media;
+		dispatch('onClickMedia', media);
 	};
 
 	const onDownload = (title: string, url: string) => {
@@ -28,8 +33,8 @@
 
 <button
 	title={media.title}
-	class="playlist-item"
-	class:selected
+	class="media-item"
+	class:selected={media == currentMedia}
 	on:click={() => onClickMedia(media)}
 	on:keydown={(e) => e.key === 'Enter' && onClickMedia(media)}
 	tabindex="0"
@@ -38,9 +43,14 @@
 		<img class="thumbnail" src={media.thumbnail} alt={media.title} />
 	</div>
 	<div class="video-details">
+		{#if media.sessionTitle}
+		<div class="media-title media-session-title" style="color: {media.sessionTypeColor}">{media.sessionTitle}</div>
+		{/if}
 		<div class="media-title"><strong>{media.title}</strong></div>
 		<div class="subtitle">
+			{#if showTime}
 			<span>{getTimeEmoji(media.start)} {media.start}</span>
+			{/if}
 			{#if downloadable}
 				<button
 					type="button"
@@ -70,10 +80,117 @@
 			{/if}
 		</div>
 		{#if media.speakers}
-			<Speakers speakers={media.speakers} />
+			<Speakers speakers={media.speakers} optimizeSpace={true} />
 		{/if}
 	</div>
 </button>
 
 <style>
+	button {
+		all: unset;
+		display: inline-block;
+		text-align: initial;
+	}
+
+	.media-item:first-child {
+		border-top-left-radius: 2px;
+		border-top-right-radius: 2px;
+	}
+
+	.media-item:last-child {
+		border-bottom-left-radius: 2px;
+		border-bottom-right-radius: 2px;
+	}
+
+	.media-item {
+		display: flex;
+		gap: 10px;
+		padding: 5px;
+		cursor: pointer;
+	}
+
+	.media-item.selected,
+	.media-item:hover {
+		background-color: rgb(33, 36, 37);
+	}
+
+	.media-item.selected {
+		border-left: 3px solid blueviolet;
+	}
+
+	.media-title {
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+		display: box;
+		font-size: 14px;
+		line-clamp: 2;
+		line-height: 1rem;
+		max-height: 2rem;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: normal;
+    	display: -webkit-box;
+	}
+
+	.media-session-title {
+		font-size: .75rem;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	.video-details {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.thumbnail-container {
+		display: flex;
+		height: 100px;
+		align-self: center;
+		align-items: center;
+	}
+
+	.thumbnail {
+		border-radius: 2px;
+	}
+
+	img.thumbnail {
+		height: 100%;
+		object-fit: contain;
+	}
+
+	.btn-download {
+		display: flex;
+		align-items: center;
+		border-radius: 5px;
+		border: none;
+		background-color: transparent;
+		height: 24px;
+
+		&:hover {
+			color: white;
+			background-color: #0077FF;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		img.thumbnail {
+			height: 85%;
+		}
+	}
+
+	@media (prefers-color-scheme: light) {
+		.media-item {
+			background-color: #fff;
+		}
+
+		.media-item.selected,
+		.media-item:hover {
+			background-color: #d1d1d1;
+		}
+
+		.media-item.selected {
+			border-left: 3px solid blueviolet;
+		}
+	}
 </style>

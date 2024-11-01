@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Person from '$lib/Person.svelte';
+	import { base } from '$app/paths';
 	import { mediaHistory } from "../stores";
-	import Speakers from './Speakers.svelte';
+	import MediaCard from './MediaCard.svelte';
 
 	export let showModal: boolean;
 
@@ -12,12 +12,21 @@
 	}
 
 	const onClickMedia = (media: any) => {
-		console.log("Clicked media", media);
+		window.location.assign(`${base}/session?id=${media.sessionId}&selectedMediaUrl=${media.hdUrl}`);
+	}
+
+	const onClearHistory = () => {
+		if (!$mediaHistory || $mediaHistory.length === 0) return;
+
+		if (confirm("Êtes-vous certain de vouloir supprimer l'intégralité de votre historique ?")) {
+			$mediaHistory = [];
+		}
 	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
+
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
@@ -25,39 +34,27 @@
 >
 	<div id="dialog-container">
 		<div id="dialog-header">
-			<h2>Historique</h2>
+			<div class="dialog-title">
+				<h2>Historique</h2>
+				<button type="button" class="btn-danger" title="Effacer l'historique" on:click={() => onClearHistory()}>
+					<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+				</button>
+			</div>
 			<button type="button" title="Fermer" on:click={() => dialog.close()}>
 				<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_11083)"> <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11083"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
 			</button>
 		</div>
 		<hr />
 		<div id="dialog-body">
-			{#if $mediaHistory.length == 0}
+			{#if !$mediaHistory || $mediaHistory.length == 0}
 			<div id="placeholder">🙂‍↔️ Vous n'avez pas d'historique.</div>
-			{/if}
-			{#each $mediaHistory as item}
-			<div
-				on:click={() => onClickMedia(item)} on:keydown={(e) => e.key === 'Enter' && onClickMedia(item)}
-				title={item.title}
-				role="link"
-				tabindex="0"
-			>
-				<div class="thumbnail-container">
-					<img class="thumbnail" src={item.thumbnail} alt={item.title} />
-				</div>
-				<div class="video-details">
-					<div class="session-title">
-						<strong>{item.sessionTitle}</strong>
-					</div>
-					<div class="media-title">
-						<strong>{item.title}</strong>
-					</div>
-					{#if item.speakers}
-					<Speakers speakers={item.speakers} />
-					{/if}
-				</div>
+			{:else}
+			<div class="media-list">
+				{#each $mediaHistory as item}
+				<MediaCard media={item} showTime={false} on:onClickMedia={(e) => onClickMedia(item)} />
+				{/each}
 			</div>
-			{/each}
+			{/if}
 		</div>
 	</div>
 </dialog>
@@ -65,7 +62,7 @@
 <style>
 	dialog {
 		min-width: 20em;
-		max-width: 80%;
+		max-width: 50%;
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
@@ -112,6 +109,9 @@
 		margin-top: 0;
 		margin-bottom: 0;
 	}
+	.dialog-title {
+		display: flex;
+	}
 	#dialog-header button {
 		display: flex;
 		align-items: center;
@@ -122,56 +122,36 @@
 		cursor: pointer;
 		background-color: transparent;
 	}
+	.btn-danger {
+		color: #dc3545;
+	}
 	hr {
 		width: 100%;
 	}
 	#dialog-body {
 		flex: 1;
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		flex-direction: column;
+	}
+	.media-list {
+		display: flex;
+		flex-direction: column;
+		overflow-y: auto;
 	}
 	#placeholder {
 		margin-top: 20px;
 		margin-bottom: 20px;
+		text-align: center;
 	}
 	@media (prefers-color-scheme: dark) {
 		dialog {
 			background-color: #363062;
 		}
 	}
-	.session-title, .media-title {
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 2;
-		display: box;
-		font-size: 14px;
-		line-clamp: 2;
-		line-height: 1rem;
-		max-height: 2rem;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		white-space: normal;
-    	display: -webkit-box;
-	}
 
-	.video-details {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.thumbnail-container {
-		display: flex;
-		height: 100px;
-		align-self: center;
-		align-items: center;
-	}
-
-	.thumbnail {
-		border-radius: 2px;
-	}
-
-	img {
-		height: 100%;
-		object-fit: contain;
+	@media (max-width: 1000px) {
+		dialog {
+			max-width: 95%;
+		}
 	}
 </style>

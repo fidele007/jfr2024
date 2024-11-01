@@ -156,6 +156,17 @@
 		$mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
 	}
 
+	const onMediaEnded = (media: any) => {
+		if (!$prefs.autoplay) {
+			return;
+		}
+
+		const mediaIndex = mediaList.indexOf(media);
+		if (mediaIndex < mediaList.length - 1) {
+			currentMedia = mediaList[mediaIndex + 1];
+		}
+	}
+
 	$: if ($prefs) $prefs = {autoplay: autoplay};
 </script>
 
@@ -197,7 +208,7 @@
 				{/if}
 			</div>
 			<div id="video-container">
-				<video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)}>
+				<video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)} on:ended={() => onMediaEnded(currentMedia)}>
 					<track kind="captions" />
 				</video>
 			</div>

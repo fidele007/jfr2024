@@ -12,7 +12,7 @@
 	}
 
 	const onClickMedia = (media: any) => {
-		window.location.assign(`${base}/session?id=${media.sessionId}&selectedMediaUrl=${media.hdUrl}`);
+		window.location.assign(`${base}/session?id=${media.sessionId}&media-url=${media.hdUrl}`);
 	}
 
 	const onClearHistory = () => {
@@ -63,6 +63,10 @@
 	dialog {
 		min-width: 20em;
 		max-width: 50%;
+		min-height: 40%;
+		/* height: 70%; */
+		/* height: fit-content; */
+		max-height: 90%;
 		border-radius: 0.2em;
 		border: none;
 		padding: 0;
@@ -98,7 +102,7 @@
 	#dialog-container {
 		display: flex;
 		flex-direction: column;
-		height: 100%;
+		height: 70vh;
 	}
 	#dialog-header {
 		display: flex;
@@ -132,6 +136,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		overflow-y: auto;
 	}
 	.media-list {
 		display: flex;

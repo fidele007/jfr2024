@@ -6,9 +6,10 @@
 	import { getFriendlyDate, getTimeEmoji, sanitizeFilename } from '$lib/Constants.svelte';
 	import Speakers from '$lib/Speakers.svelte';
 	import Person from '$lib/Person.svelte';
-	import { mediaHistory } from '../../stores';
+	import { mediaHistory, prefs } from '../../stores';
 	import MediaCard from '$lib/MediaCard.svelte';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
+	import Switch from '$lib/Switch.svelte';
 
 	const MEDIA_HISTORY_LIMIT = 25;
 
@@ -18,7 +19,7 @@
 
 	if (searchParams) {
 		sessionId = searchParams.get('id');
-		selectedMediaUrl = searchParams.get('selectedMediaUrl');
+		selectedMediaUrl = searchParams.get('media-url');
 	}
 
 	let loading = true;
@@ -29,6 +30,7 @@
 	let responsables: [any];
 
 	let currentMedia: any;
+	let autoplay: boolean = $prefs?.autoplay ?? false;
 
 	let mediaList: {
 		id: string | null;
@@ -146,12 +148,15 @@
 		const filteredArray = $mediaHistory.filter((item: any) => item.hdUrl !== media.hdUrl);
 
 		// console.log("onMediaPlay", media);
-		media["sessionId"] = sessionId;
-		media["sessionTitle"] = eventDetail.title;
-		media["sessionTypeColor"] = eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
+		const historyMedia = structuredClone(media);
+		historyMedia["sessionId"] = sessionId;
+		historyMedia["sessionTitle"] = eventDetail.title;
+		historyMedia["sessionTypeColor"] = eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
 
-		$mediaHistory = [media, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
+		$mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
 	}
+
+	$: if ($prefs) $prefs = {autoplay: autoplay};
 </script>
 
 <svelte:head>
@@ -192,7 +197,7 @@
 				{/if}
 			</div>
 			<div id="video-container">
-				<video controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)}>
+				<video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)}>
 					<track kind="captions" />
 				</video>
 			</div>
@@ -248,6 +253,7 @@
 		<div class="playlist-container">
 			<div id="playlist-title">
 				<strong>Liste de lecture ({mediaList.length}):</strong>
+				<Switch bind:checked={autoplay} />
 			</div>
 			<div class="playlist">
 				{#each mediaList as item}
@@ -442,6 +448,13 @@
 		padding: 8px 12px;
 		background-color: rgb(24, 26, 27);
 		border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+	}
+
+	.playlist-container #playlist-title {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
 	}
 
 	.current-media {

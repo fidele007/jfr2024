@@ -8,3 +8,7 @@ export const filterOptions = localStore("filter-options", {
 });
 
 export const mediaHistory = localStore("media-history", []);
+
+export const prefs = localStore("prefs", {
+	autoplay: false,
+})

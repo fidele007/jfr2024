@@ -4,8 +4,9 @@
 	import { onDestroy, onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import BackToTop from '$lib/BackToTop.svelte';
-	import { filterOptions } from '../stores';
+	import { filterOptions, prefs } from '../stores';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
+	import { exists } from '@tauri-apps/plugin-fs';
 
 	let searchInput: HTMLInputElement;
 
@@ -136,6 +137,9 @@
 		document.addEventListener('scroll', onScroll);
 
 		await searchSessions(searchInput.value);
+
+		// const testFileExists = await exists("D:/synonyms_modif.txt");
+		// console.log("testFileExists", testFileExists);
 	});
 
 	onDestroy(() => {

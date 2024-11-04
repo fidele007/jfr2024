@@ -13,6 +13,12 @@
 		"gh-pages": "npm run build && npx gh-pages -d build -t true",
 		"tauri": "tauri"
 	},
+	"license": "MIT",
+	"dependencies": {
+		"@tauri-apps/api": "^2",
+		"@tauri-apps/plugin-fs": "^2.0.1",
+		"@tauri-apps/plugin-shell": "^2"
+	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.2.5",
 		"@sveltejs/adapter-static": "^3.0.5",

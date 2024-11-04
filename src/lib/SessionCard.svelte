@@ -2,6 +2,8 @@
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
 	import { getFriendlyDate, getTimeEmoji } from './Constants.svelte';
+	import { invoke, convertFileSrc } from "@tauri-apps/api/core";
+	import { prefs } from '../stores';
 
 	export let info: any;
 
@@ -10,6 +12,26 @@
 	let speakers: string;
 	let organizers: string;
 	let tags: [string];
+	let src: string;
+
+	const resolveMediaThumbnailUrl = async (thumbnailUrl: string) => {
+		// https://services.medicalcongress.online/congress/medias/2024/JFR2024/650/video/thumbs/poster.jpg
+		if (!window.__TAURI_INTERNALS__) {
+			src = thumbnailUrl;
+			return;
+		}
+
+		const videoIdRegex = /\/(\d+)\/video\//g;
+		const match = videoIdRegex.exec(thumbnailUrl);
+		if (!match) {
+			src = thumbnailUrl;
+			return;
+		}
+
+		const dataDir = $prefs.dataDirectory ?? await invoke("get_executable_dir_path");
+		const filePath = `${dataDir}/thumbs/${match[1]}.jpg`;
+		src = convertFileSrc(filePath);
+	}
 
 	const onSessionCardClick = () => {
 		window.location.assign(`${base}/session?id=${info.id}`);
@@ -34,6 +56,8 @@
 		organizers = info.organizers?.map((item: any) => item.name).join(', ');
 
 		tags = info.tracks?.map((track: any) => track.label);
+
+		resolveMediaThumbnailUrl(info.picture);
 	});
 </script>
 
@@ -54,7 +78,7 @@
 			</div>
 			{#if info.picture}
 			<div class="thumbnail-container-small-screen">
-				<img src={info.picture} alt={info.title} class="thumbnail" />
+				<img {src} alt={info.title} class="thumbnail" />
 			</div>
 			{/if}
 		</div>
@@ -92,7 +116,7 @@
 	</div>
 	<div class="thumbnail-container-big-screen">
 		{#if info.picture}
-			<img src={info.picture} alt={info.title} class="thumbnail" />
+			<img {src} alt={info.title} class="thumbnail" />
 		{/if}
 	</div>
 </div>

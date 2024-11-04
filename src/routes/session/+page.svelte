@@ -10,6 +10,8 @@
 	import MediaCard from '$lib/MediaCard.svelte';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 	import Switch from '$lib/Switch.svelte';
+	import { convertFileSrc, invoke } from '@tauri-apps/api/core';
+	import { exists } from '@tauri-apps/plugin-fs';
 
 	const MEDIA_HISTORY_LIMIT = 25;
 
@@ -42,13 +44,57 @@
 		speakers: [any] | null;
 	}[] = [];
 
-	const fileExists = (fileUrl: string) => {
-		var http = new XMLHttpRequest();
+	const fileExists = async (fileUrl: string) => {
+		if (!window.__TAURI_INTERNALS__) {
+			var http = new XMLHttpRequest();
 
-		http.open('HEAD', fileUrl, false);
-		http.send();
+			http.open('HEAD', fileUrl, false);
+			http.send();
 
-		return http.status != 404;
+			return http.status != 404;
+		}
+
+		const videoIdRegex = /\/(\d+)\/video\//g;
+		const match = videoIdRegex.exec(fileUrl);
+		if (!match) {
+			return false;
+		}
+
+		const dataDir = $prefs.dataDirectory ?? await invoke("get_executable_dir_path");
+		const localVideoUrl = `${dataDir}/video/${match[1]}.mp4`;
+		return await exists(localVideoUrl);
+	};
+
+	const resolveMediaThumbnailUrl = async (thumbnailUrl: string) => {
+		// https://services.medicalcongress.online/congress/medias/2024/JFR2024/650/video/thumbs/poster.jpg
+		if (!window.__TAURI_INTERNALS__) {
+			return thumbnailUrl;
+		}
+
+		const videoIdRegex = /\/(\d+)\/video\//g;
+		const match = videoIdRegex.exec(thumbnailUrl);
+		if (!match) {
+			return thumbnailUrl;
+		}
+
+		const dataDir = $prefs.dataDirectory ?? await invoke("get_executable_dir_path");
+		const filePath = `${dataDir}/thumbs/${match[1]}.jpg`;
+		return convertFileSrc(filePath);
+	}
+
+	const resolveMediaSource = async (url: any) => {
+		// https://services.medicalcongress.online/congress/medias/2024/JFR2024/2648/video/y_1080p_4000kb.mp4
+		if (window.__TAURI_INTERNALS__) {
+			const videoIdRegex = /\/(\d+)\/video\//g;
+			const match = videoIdRegex.exec(url);
+			if (match) {
+				const dataDir = $prefs.dataDirectory ?? await invoke("get_executable_dir_path");
+				const localVideoUrl = `${dataDir}/video/${match[1]}.mp4`;
+				return convertFileSrc(localVideoUrl);
+			}
+		}
+
+		return url;
 	};
 
 	const getBestMediaSource = (media: any) => {
@@ -77,9 +123,9 @@
 				mediaList.push({
 					id: item.vod.media.id,
 					title: item.vod.media.id ? item.title : `${item.title} Ⓜ️`,
-					hdUrl: item.vod.media.element.sources[0].uri,
-					url: item.vod.media.element.sources[1]?.uri,
-					thumbnail: item.vod.media.thumbnail,
+					hdUrl: await resolveMediaSource(item.vod.media.element.sources[0].uri),
+					url: await resolveMediaSource(item.vod.media.element.sources[1]?.uri),
+					thumbnail: await resolveMediaThumbnailUrl(item.vod.media.thumbnail),
 					start: item.start.split('T')[1].split('+')[0],
 					speakers: item.speakers.items
 				});
@@ -90,9 +136,9 @@
 			mediaList.push({
 				id: eventDetail.vod.media.id,
 				title: eventDetail.vod.media.title ?? '[Sans titre]',
-				hdUrl: eventDetail.vod.media.element.sources[0].uri,
-				url: eventDetail.vod.media.element.sources[1]?.uri,
-				thumbnail: eventDetail.vod.media.thumbnail,
+				hdUrl: await resolveMediaSource(eventDetail.vod.media.element.sources[0].uri),
+				url: await resolveMediaSource(eventDetail.vod.media.element.sources[1]?.uri),
+				thumbnail: await resolveMediaThumbnailUrl(eventDetail.vod.media.thumbnail),
 				start: eventDetail.start.split('T')[1].split('+')[0],
 				speakers: eventDetail.speakers.items
 			});
@@ -104,23 +150,23 @@
 			const hiddenMedia: any = {
 				id: null,
 				title: '[Non répertoriée]',
-				thumbnail: eventDetail.picture,
+				thumbnail: await resolveMediaThumbnailUrl(eventDetail.picture),
 				start: eventDetail.start.split('T')[1].split('+')[0],
 				speakers: null
 			};
 
 			const possibleHDVideoUrl =
 				eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
-			const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && fileExists(possibleHDVideoUrl);
+			const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && await fileExists(possibleHDVideoUrl);
 			if (addHdUrl) {
-				hiddenMedia.hdUrl = possibleHDVideoUrl;
+				hiddenMedia.hdUrl = await resolveMediaSource(possibleHDVideoUrl);
 			}
 
 			const possibleVideoUrl =
 				eventDetail.picture.split('/video/')[0] + '/video/y_480p_800kb.mp4';
-			const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && fileExists(possibleVideoUrl);
+			const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && await fileExists(possibleVideoUrl);
 			if (addUrl) {
-				hiddenMedia.url = possibleVideoUrl;
+				hiddenMedia.url = await resolveMediaSource(possibleVideoUrl);
 			}
 
 			if (hiddenMedia.hdUrl || hiddenMedia.url) {
@@ -167,7 +213,9 @@
 		}
 	}
 
-	$: if ($prefs) $prefs = {autoplay: autoplay};
+	$: if ($prefs) {
+		$prefs.autoplay = autoplay;
+	}
 </script>
 
 <svelte:head>

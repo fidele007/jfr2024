@@ -9,7 +9,12 @@
 	let dataDirPlaceholder: string;
 
 	const onChangeDataDir = (e: Event) => {
-		$prefs.dataDirectory = (e.target as HTMLInputElement).value;
+		const inputValue = (e.target as HTMLInputElement).value;
+		if (inputValue) {
+			$prefs.dataDirectory = inputValue;
+		} else {
+			$prefs.dataDirectory = dataDirPlaceholder;
+		}
 	}
 
 	$: {
@@ -43,7 +48,7 @@
 		<hr />
 		<div id="dialog-body">
 			<label for="data-dir">Répertoire de données</label>
-			<input type="text" id="data-dir" placeholder="{dataDirPlaceholder}" value="{$prefs?.dataDirectory}" on:change={(e) => onChangeDataDir(e)} />
+			<input type="text" id="data-dir" placeholder="{dataDirPlaceholder}" value="{$prefs?.dataDirectory ?? ''}" on:change={(e) => onChangeDataDir(e)} />
 			<div class="hint"><em>Veuillez rafraîchir la page pour que les modifications soient prises en compte.</em></div>
 		</div>
 	</div>

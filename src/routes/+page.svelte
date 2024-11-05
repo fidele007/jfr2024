@@ -6,7 +6,7 @@
 	import BackToTop from '$lib/BackToTop.svelte';
 	import { filterOptions, prefs } from '../stores';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
-	import { exists } from '@tauri-apps/plugin-fs';
+	import Settings from '$lib/Settings.svelte';
 
 	let searchInput: HTMLInputElement;
 
@@ -26,6 +26,8 @@
 	let sessionsByDate: any = {};
 	let filteredSessions: any;
 	let displaySessions: any;
+
+	let isTauri: boolean;
 
 	const debounce = (callback: Function, wait = 300) => {
 		return (...args: any[]) => {
@@ -75,13 +77,6 @@
 		showClearSearch = searchInput.value?.length > 0;
 		loading = true;
 		debounce(searchSessions).call(null, searchInput.value);
-	};
-
-	const onDeleteSearch = () => {
-		if (searchInput.value) {
-			searchInput.value = '';
-			onSearch();
-		}
 	};
 
 	const onDateChange = async (date: string) => {
@@ -138,6 +133,8 @@
 
 		await searchSessions(searchInput.value);
 
+		isTauri = window.__TAURI_INTERNALS__;
+
 		// const testFileExists = await exists("D:/synonyms_modif.txt");
 		// console.log("testFileExists", testFileExists);
 	});
@@ -155,8 +152,11 @@
 
 <main>
 	<div class="sticky-top" id="top-header">
-		<div>
+		<div id="logo-container">
 			<img src={logoUrl} class="logo" alt="JFR 2024" />
+			{#if isTauri}
+			<Settings />
+			{/if}
 		</div>
 		<div id="filter-row">
 			<div id="search-container">
@@ -239,6 +239,13 @@
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
 		box-shadow: 0 8px 6px -10px black;
+	}
+
+	#logo-container {
+		display: flex;
+		align-items: flex-start;
+		justify-content: center;
+		gap: 5px;
 	}
 
 	.logo {

@@ -20,7 +20,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self' ipc: http://ipc.localhost; img-src 'self' asset: http://asset.localhost",
+      "csp": "default-src 'self' ipc: http://ipc.localhost https://fonts.gstatic.com; img-src 'self' data: asset: http://asset.localhost https://services.y-congress.com; media-src 'self' asset: http://asset.localhost https://services.y-congress.com; style-src 'self' 'unsafe-inline' asset: https://fonts.googleapis.com",
       "assetProtocol": {
         "enable": true,
         "scope": ["**"]

@@ -3,13 +3,16 @@
 	import { prefs } from "../stores";
 	import { invoke } from "@tauri-apps/api/core";
 
-	let showSettings: boolean = false;
 	let dialog: HTMLDialogElement;
 
+	let showSettings: boolean = false;
 	let dataDirPlaceholder: string;
+	let hasDataDirChanged: boolean;
 
 	const onChangeDataDir = (e: Event) => {
 		const inputValue = (e.target as HTMLInputElement).value;
+		hasDataDirChanged = inputValue ? $prefs.dataDirectory != inputValue : $prefs.dataDirectory != dataDirPlaceholder;
+
 		if (inputValue) {
 			$prefs.dataDirectory = inputValue;
 		} else {
@@ -17,8 +20,18 @@
 		}
 	}
 
+	const onDialogClose = () => {
+		showSettings = false;
+		if (hasDataDirChanged) {
+			location.reload();
+		}
+	};
+
 	$: {
-		if (showSettings) dialog.showModal();
+		if (showSettings) {
+			dialog.showModal();
+			hasDataDirChanged = false;
+		}
 	}
 
 	onMount(async () => {
@@ -34,7 +47,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog
 	bind:this={dialog}
-	on:close={() => (showSettings = false)}
+	on:close={() => onDialogClose()}
 >
 	<div id="dialog-container">
 		<div id="dialog-header">
@@ -49,7 +62,7 @@
 		<div id="dialog-body">
 			<label for="data-dir">Répertoire de données</label>
 			<input type="text" id="data-dir" placeholder="{dataDirPlaceholder}" value="{$prefs?.dataDirectory ?? ''}" on:change={(e) => onChangeDataDir(e)} />
-			<div class="hint"><em>Veuillez rafraîchir la page pour que les modifications soient prises en compte.</em></div>
+			<div class="hint"><em>Pour que les modifications soient prises en compte, la page sera rafrâichie à la fermeture du dialogue.</em></div>
 		</div>
 	</div>
 </dialog>

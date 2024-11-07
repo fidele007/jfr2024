@@ -3,7 +3,16 @@ use std::path::PathBuf;
 #[tauri::command]
 fn get_executable_dir_path() -> Result<PathBuf, String> {
     match std::env::current_exe() {
-        Ok(path) => Ok(path.parent().unwrap().to_path_buf()),
+        Ok(path) => {
+            if let Some(path_str) = path.to_str() {
+                if path_str.contains(".app/Contents/MacOS") {
+                    // /Applications/JFR 2024.app/Contents/MacOS/jfr2024
+                    return Ok(path.parent().unwrap().parent().unwrap().parent().unwrap().parent().unwrap().to_path_buf());
+                }
+            }
+
+            return Ok(path.parent().unwrap().to_path_buf());
+        },
         Err(error) => return Err(format!("{error}")),
     }
 }

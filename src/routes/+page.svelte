@@ -33,6 +33,12 @@
 		};
 	};
 
+	const extractTextFromHTML = (htmlString: string) => {
+		const parser = new DOMParser();
+		const doc = parser.parseFromString(htmlString, 'text/html');
+		return doc.body.textContent || "";
+	}
+
 	const searchSessions = async (value: string) => {
 		// console.log('Searching for: ', value);
 		loading = true;
@@ -40,16 +46,17 @@
 		// await new Promise(r => setTimeout(r, 3000));
 
 		const scopedSessions = sessionsByDate[selectedDate];
+		const normalizedSearchTerm = normalizeString(value).toUpperCase();
 		if (onlyVideos) {
 			filteredSessions = value
 				? scopedSessions.filter((x: any) => x.picture &&
-						normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
+						(x.normalizedTitle.includes(normalizedSearchTerm) || x.normalizedObjective.includes(normalizedSearchTerm))
 				  )
 				: scopedSessions.filter((x: any) => x.picture);
 		} else {
 			filteredSessions = value
 				? scopedSessions.filter((x: any) =>
-						normalizeString(x.title).toUpperCase().includes(normalizeString(value).toUpperCase())
+						(x.normalizedTitle.includes(normalizedSearchTerm) || x.normalizedObjective.includes(normalizedSearchTerm))
 				  )
 				: scopedSessions;
 		}
@@ -130,6 +137,10 @@
 			if (!sessionsByDate[startDate]) {
 				sessionsByDate[startDate] = [];
 			}
+
+			item['normalizedTitle'] = normalizeString(item.title).toUpperCase();
+			item['normalizedObjective'] = normalizeString(extractTextFromHTML(item.objectives.join("\n"))).toUpperCase();
+
 			sessionsByDate[startDate].push(item);
 		});
 

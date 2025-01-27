@@ -39,6 +39,11 @@
 		return doc.body.textContent || "";
 	}
 
+	const eventContainString = (event: any, value: string) => {
+		const normalizedSearchTerm = normalizeString(value).toUpperCase();
+		return event.normalizedTitle.includes(normalizedSearchTerm) || event.normalizedObjective.includes(normalizedSearchTerm) || event.normalizedOrganizers.includes(normalizedSearchTerm) || event.normalizedMembers.includes(normalizedSearchTerm);
+	}
+
 	const searchSessions = async (value: string) => {
 		// console.log('Searching for: ', value);
 		loading = true;
@@ -46,18 +51,13 @@
 		// await new Promise(r => setTimeout(r, 3000));
 
 		const scopedSessions = sessionsByDate[selectedDate];
-		const normalizedSearchTerm = normalizeString(value).toUpperCase();
 		if (onlyVideos) {
 			filteredSessions = value
-				? scopedSessions.filter((x: any) => x.picture &&
-						(x.normalizedTitle.includes(normalizedSearchTerm) || x.normalizedObjective.includes(normalizedSearchTerm))
-				  )
+				? scopedSessions.filter((x: any) => x.picture && eventContainString(x, value))
 				: scopedSessions.filter((x: any) => x.picture);
 		} else {
 			filteredSessions = value
-				? scopedSessions.filter((x: any) =>
-						(x.normalizedTitle.includes(normalizedSearchTerm) || x.normalizedObjective.includes(normalizedSearchTerm))
-				  )
+				? scopedSessions.filter((x: any) => eventContainString(x, value))
 				: scopedSessions;
 		}
 
@@ -140,6 +140,12 @@
 
 			item['normalizedTitle'] = normalizeString(item.title).toUpperCase();
 			item['normalizedObjective'] = normalizeString(extractTextFromHTML(item.objectives.join("\n"))).toUpperCase();
+			item['normalizedOrganizers'] = normalizeString(item.organizers.map((org: any) => org.name).join(' ')).toUpperCase();
+			item['normalizedMembers'] = normalizeString(
+				item.outerRoles
+					.map((role: any) => role.members.items.map((item: any) => `${item.firstName} ${item.lastName}`).join(' '))
+					.join(' ')
+			).toUpperCase();
 
 			sessionsByDate[startDate].push(item);
 		});

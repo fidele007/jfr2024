@@ -11,6 +11,179 @@
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 	import Switch from '$lib/Switch.svelte';
 
+	const graphqlUrl = 'https://gql.cyim.com/graphql';
+	const bearerToken = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZWldOOHcxMXZHa2J6bkZ4cXNaVDd0dWVKcW9BNG5TU0FLTHVtQ2VsMzJ3In0.eyJleHAiOjE3Mjg2NTY1MTgsImlhdCI6MTcyODM5NzMxOCwiYXV0aF90aW1lIjoxNzI4MzkyNzUyLCJqdGkiOiI5NGI2OGYyNC04MzBjLTQwM2MtYjNkNy1iNjE4MGYwNzYyZjMiLCJpc3MiOiJodHRwczovL2F1dGguamZycGx1cy5qZnIucGx1cy9hdXRoL3JlYWxtcy9jeWltLW15YWNjb3VudCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI2OWMyYjU4OC0zNDNkLTQ2MDctOGYyZC1mMDRmNTMzNmE1ZTAiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBzLWNvbmdyZXMiLCJub25jZSI6IjRkN2Y0MjY5LTYxNGItNGNiZi04ZTlkLTA1YTkxM2EwOTJkZSIsInNlc3Npb25fc3RhdGUiOiJjYmNhYTVmNi00YjMwLTQzNjgtYmQyZi05ZGFhMWYzZjJkZjEiLCJhY3IiOiIwIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtY3lpbS1teWFjY291bnQiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgY3lpbSBlbWFpbCBwcm9maWxlIGxlYWRzIiwic2lkIjoiY2JjYWE1ZjYtNGIzMC00MzY4LWJkMmYtOWRhYTFmM2YyZGYxIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiTGVhbmdzaW5nIElWIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibGVhbmdzaW5nLmltYUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGVhbmdzaW5nIiwiZmFtaWx5X25hbWUiOiJJViIsImVtYWlsIjoibGVhbmdzaW5nLmltYUBnbWFpbC5jb20ifQ.RCI0_VRQI6gzFMN_nmE07qRKkniaYXh-VPtK2zokaQIjQg_AxTwhMAbAs0_f2nFGdf_rG8ZFFWaBmgvknH3bnnDAR3Sjv1D4fopcCCbwrpEN0k4xcrdThlePFj5B6G4WCZvcdmeLPjYFj3D7BVBEH3BDXocq0_i7_VhdOrxCNVW8KA_EKd5NHQYwdLAl0Jpdcnc3zM_gSW1AyZh5Ew0fM5sFLUiEKxsReqdBpSqzRaUJfqhz68sqbLl4qK37diTxKVjl8P_VBp5UOIn42jNOjBrgstGyKkxYDex7pSNhYMUHOBUhTYj8-iEj8yi0FvSvB1WjGEZNzh6UaBIPqtP0CQ";
+	const querySession = `
+	{
+		event(id: "$sessionId") {
+			id
+			picture
+			sessionType: tag(category: "/session/type")
+			sessionTypeColor: color
+			voting: tag(category: "/interactivity/voting")
+			title
+			start
+			end
+			objectives
+			onAir: ongoing
+			vod {
+				checkPermissions(actions: ["media:view"])
+				media {
+					id
+					type
+					thumbnail
+					element {
+						... on MediaVideo {
+							sources {
+								uri
+							}
+						}
+					}
+				}
+			}
+			broadcasts {
+				items {
+					isLive
+					onAir
+					channel: location {
+						id
+						type
+						name
+						thumbnails {
+							id
+							url
+						}
+					}
+				}
+			}
+			room: location {
+				id
+				name
+				type
+			}
+			schedule {
+				items {
+					id
+					title
+					start
+					end
+					element {
+						... on Presentation {
+							abstract {
+								id
+							}
+						}
+					}
+					speakers: participants(role: "speaker", recursive: true) {
+						items {
+							id
+							lastName
+							firstName
+							roles {
+								name
+							}
+							photo {
+								url
+							}
+							country {
+								name
+							}
+							city {
+								name
+							}
+						}
+					}
+					vod {
+						checkPermissions(actions: ["media:view"])
+						media {
+							id
+							type
+							thumbnail
+							element {
+								... on MediaVideo {
+									sources {
+										uri
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			roles {
+				name
+				assignees {
+					items {
+						id
+						firstName
+						lastName
+						photo {
+							url
+						}
+						country {
+							name
+						}
+						city {
+							name
+						}
+					}
+				}
+			}
+			speakers: participants(role: "speaker", recursive: true) {
+				items {
+					id
+					firstName
+					lastName
+					photo {
+						url
+					}
+					country {
+						name
+					}
+					city {
+						name
+					}
+				}
+			}
+			chairs: participants(role: "chair", recursive: false) {
+				items {
+					id
+					firstName
+					lastName
+					photo {
+						url
+					}
+					country {
+						name
+					}
+					city {
+						name
+					}
+				}
+			}
+			topics {
+				_id: id
+				value
+			}
+			tracks {
+				color
+				id
+				value
+				label
+			}
+			organizers {
+				id
+				name
+				logo
+			}
+			programmeOwners {
+				title
+				id
+			}
+		}
+	}
+	`;
+
 	const MEDIA_HISTORY_LIMIT = 25;
 
 	const searchParams = browser && $page.url.searchParams;
@@ -62,7 +235,18 @@
 	onMount(async () => {
 		// await new Promise(r => setTimeout(r, 3000));
 
-		const response = await fetch(`${base}/json/${sessionId}.json`);
+		const response = await fetch(graphqlUrl, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': `Bearer ${bearerToken}`
+			},
+			body: JSON.stringify({
+				query: querySession.replace("$sessionId", sessionId!)
+			})
+		});
+
+		// const response = await fetch(`${base}/json/${sessionId}.json`);
 		sessionDetail = await response.json();
 		eventDetail = sessionDetail.data.event;
 
@@ -99,34 +283,34 @@
 		}
 
 		// Check and add hidden media
-		if (eventDetail.picture) {
-			// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
-			const hiddenMedia: any = {
-				id: null,
-				title: '[Non répertoriée]',
-				thumbnail: eventDetail.picture,
-				start: eventDetail.start.split('T')[1].split('+')[0],
-				speakers: null
-			};
+		// if (eventDetail.picture) {
+		// 	// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
+		// 	const hiddenMedia: any = {
+		// 		id: null,
+		// 		title: '[Non répertoriée]',
+		// 		thumbnail: eventDetail.picture,
+		// 		start: eventDetail.start.split('T')[1].split('+')[0],
+		// 		speakers: null
+		// 	};
 
-			const possibleHDVideoUrl =
-				eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
-			const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && fileExists(possibleHDVideoUrl);
-			if (addHdUrl) {
-				hiddenMedia.hdUrl = possibleHDVideoUrl;
-			}
+		// 	const possibleHDVideoUrl =
+		// 		eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
+		// 	const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && fileExists(possibleHDVideoUrl);
+		// 	if (addHdUrl) {
+		// 		hiddenMedia.hdUrl = possibleHDVideoUrl;
+		// 	}
 
-			const possibleVideoUrl =
-				eventDetail.picture.split('/video/')[0] + '/video/y_480p_800kb.mp4';
-			const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && fileExists(possibleVideoUrl);
-			if (addUrl) {
-				hiddenMedia.url = possibleVideoUrl;
-			}
+		// 	const possibleVideoUrl =
+		// 		eventDetail.picture.split('/video/')[0] + '/video/y_480p_800kb.mp4';
+		// 	const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && fileExists(possibleVideoUrl);
+		// 	if (addUrl) {
+		// 		hiddenMedia.url = possibleVideoUrl;
+		// 	}
 
-			if (hiddenMedia.hdUrl || hiddenMedia.url) {
-				mediaList.push(hiddenMedia);
-			}
-		}
+		// 	if (hiddenMedia.hdUrl || hiddenMedia.url) {
+		// 		mediaList.push(hiddenMedia);
+		// 	}
+		// }
 
 		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
 
@@ -218,12 +402,12 @@
 					<h1>{eventDetail.title}</h1>
 					<div class="date-time subtitle">
 						<div>
-							🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
+							🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
 						</div>
 						<div>
-							{getTimeEmoji(eventDetail.start.split('T')[1].split('+')[0])} {eventDetail.start.split('T')[1].split('+')[0] +
+							{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])} {eventDetail.start?.split('T')[1].split('+')[0] +
 								' - ' +
-								eventDetail.end.split('T')[1].split('+')[0]}
+								eventDetail.end?.split('T')[1].split('+')[0]}
 						</div>
 					</div>
 				</div>
@@ -280,12 +464,12 @@
 			<h1>{eventDetail.title}</h1>
 			<div class="date-time subtitle">
 				<div>
-					🗓️ {getFriendlyDate(eventDetail.start.split('T')[0])}
+					🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
 				</div>
 				<div>
-					{getTimeEmoji(eventDetail.start.split('T')[1].split('+')[0])} {eventDetail.start.split('T')[1].split('+')[0] +
+					{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])} {eventDetail.start?.split('T')[1].split('+')[0] +
 						' - ' +
-						eventDetail.end.split('T')[1].split('+')[0]}
+						eventDetail.end?.split('T')[1].split('+')[0]}
 				</div>
 			</div>
 		</div>

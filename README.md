@@ -13,6 +13,7 @@ npm install
 ```bash
 npm update
 ```
+
 ## Upgrade All Dependencies (major versions)
 
 ```bash

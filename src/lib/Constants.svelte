@@ -6,6 +6,10 @@
 	}
 
 	export const getTimeEmoji = (time: string) => {
+		if (!time) {
+			return '🕤'; // Default to a clock emoji if time is invalid
+		}
+
 		let simplifiedTime = time;
 		const timeArray = time.split(":");
 		if (timeArray.length > 1) {

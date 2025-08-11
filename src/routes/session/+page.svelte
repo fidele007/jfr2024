@@ -11,179 +11,6 @@
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 	import Switch from '$lib/Switch.svelte';
 
-	const graphqlUrl = 'https://gql.cyim.com/graphql';
-	const bearerToken = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJZWldOOHcxMXZHa2J6bkZ4cXNaVDd0dWVKcW9BNG5TU0FLTHVtQ2VsMzJ3In0.eyJleHAiOjE3Mjg2NTY1MTgsImlhdCI6MTcyODM5NzMxOCwiYXV0aF90aW1lIjoxNzI4MzkyNzUyLCJqdGkiOiI5NGI2OGYyNC04MzBjLTQwM2MtYjNkNy1iNjE4MGYwNzYyZjMiLCJpc3MiOiJodHRwczovL2F1dGguamZycGx1cy5qZnIucGx1cy9hdXRoL3JlYWxtcy9jeWltLW15YWNjb3VudCIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI2OWMyYjU4OC0zNDNkLTQ2MDctOGYyZC1mMDRmNTMzNmE1ZTAiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJhcHBzLWNvbmdyZXMiLCJub25jZSI6IjRkN2Y0MjY5LTYxNGItNGNiZi04ZTlkLTA1YTkxM2EwOTJkZSIsInNlc3Npb25fc3RhdGUiOiJjYmNhYTVmNi00YjMwLTQzNjgtYmQyZi05ZGFhMWYzZjJkZjEiLCJhY3IiOiIwIiwiYWxsb3dlZC1vcmlnaW5zIjpbIioiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtY3lpbS1teWFjY291bnQiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgY3lpbSBlbWFpbCBwcm9maWxlIGxlYWRzIiwic2lkIjoiY2JjYWE1ZjYtNGIzMC00MzY4LWJkMmYtOWRhYTFmM2YyZGYxIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiTGVhbmdzaW5nIElWIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibGVhbmdzaW5nLmltYUBnbWFpbC5jb20iLCJnaXZlbl9uYW1lIjoiTGVhbmdzaW5nIiwiZmFtaWx5X25hbWUiOiJJViIsImVtYWlsIjoibGVhbmdzaW5nLmltYUBnbWFpbC5jb20ifQ.RCI0_VRQI6gzFMN_nmE07qRKkniaYXh-VPtK2zokaQIjQg_AxTwhMAbAs0_f2nFGdf_rG8ZFFWaBmgvknH3bnnDAR3Sjv1D4fopcCCbwrpEN0k4xcrdThlePFj5B6G4WCZvcdmeLPjYFj3D7BVBEH3BDXocq0_i7_VhdOrxCNVW8KA_EKd5NHQYwdLAl0Jpdcnc3zM_gSW1AyZh5Ew0fM5sFLUiEKxsReqdBpSqzRaUJfqhz68sqbLl4qK37diTxKVjl8P_VBp5UOIn42jNOjBrgstGyKkxYDex7pSNhYMUHOBUhTYj8-iEj8yi0FvSvB1WjGEZNzh6UaBIPqtP0CQ";
-	const querySession = `
-	{
-		event(id: "$sessionId") {
-			id
-			picture
-			sessionType: tag(category: "/session/type")
-			sessionTypeColor: color
-			voting: tag(category: "/interactivity/voting")
-			title
-			start
-			end
-			objectives
-			onAir: ongoing
-			vod {
-				checkPermissions(actions: ["media:view"])
-				media {
-					id
-					type
-					thumbnail
-					element {
-						... on MediaVideo {
-							sources {
-								uri
-							}
-						}
-					}
-				}
-			}
-			broadcasts {
-				items {
-					isLive
-					onAir
-					channel: location {
-						id
-						type
-						name
-						thumbnails {
-							id
-							url
-						}
-					}
-				}
-			}
-			room: location {
-				id
-				name
-				type
-			}
-			schedule {
-				items {
-					id
-					title
-					start
-					end
-					element {
-						... on Presentation {
-							abstract {
-								id
-							}
-						}
-					}
-					speakers: participants(role: "speaker", recursive: true) {
-						items {
-							id
-							lastName
-							firstName
-							roles {
-								name
-							}
-							photo {
-								url
-							}
-							country {
-								name
-							}
-							city {
-								name
-							}
-						}
-					}
-					vod {
-						checkPermissions(actions: ["media:view"])
-						media {
-							id
-							type
-							thumbnail
-							element {
-								... on MediaVideo {
-									sources {
-										uri
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			roles {
-				name
-				assignees {
-					items {
-						id
-						firstName
-						lastName
-						photo {
-							url
-						}
-						country {
-							name
-						}
-						city {
-							name
-						}
-					}
-				}
-			}
-			speakers: participants(role: "speaker", recursive: true) {
-				items {
-					id
-					firstName
-					lastName
-					photo {
-						url
-					}
-					country {
-						name
-					}
-					city {
-						name
-					}
-				}
-			}
-			chairs: participants(role: "chair", recursive: false) {
-				items {
-					id
-					firstName
-					lastName
-					photo {
-						url
-					}
-					country {
-						name
-					}
-					city {
-						name
-					}
-				}
-			}
-			topics {
-				_id: id
-				value
-			}
-			tracks {
-				color
-				id
-				value
-				label
-			}
-			organizers {
-				id
-				name
-				logo
-			}
-			programmeOwners {
-				title
-				id
-			}
-		}
-	}
-	`;
-
 	const MEDIA_HISTORY_LIMIT = 25;
 
 	const searchParams = browser && $page.url.searchParams;
@@ -235,34 +62,33 @@
 	onMount(async () => {
 		// await new Promise(r => setTimeout(r, 3000));
 
-		const response = await fetch(graphqlUrl, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${bearerToken}`
-			},
-			body: JSON.stringify({
-				query: querySession.replace("$sessionId", sessionId!)
-			})
-		});
-
-		// const response = await fetch(`${base}/json/${sessionId}.json`);
-		sessionDetail = await response.json();
+		const sessionData = await fetch(`${base}/json/${sessionId}.json`);
+		sessionDetail = await sessionData.json();
 		eventDetail = sessionDetail.data.event;
 
-		objectives = eventDetail.objectives.map((value: string) => `<div class="objectives-value">${value}</div>`).join('');
+		objectives = eventDetail.objectives
+			.map((value: string) => `<div class="objectives-value">${value}</div>`)
+			.join('');
 
 		moderators = eventDetail.roles.find((role: any) => role.name === 'modérateur')?.assignees.items;
-		responsables = eventDetail.roles.find((role: any) => role.name === 'responsable')?.assignees.items;
+		responsables = eventDetail.roles.find((role: any) => role.name === 'responsable')?.assignees
+			.items;
+
+		const videoMappingResponse = await fetch(`${base}/json/yt-video-mapping.json`);
+		const videoMapping = await videoMappingResponse.json();
 
 		// Add publicly available media to the media list
 		for (const item of eventDetail.schedule.items) {
 			if (item.vod && item.vod.media && item.vod.media.element && item.vod.media.element.sources) {
+				const videoId = item.vod.media.element.sources[0].uri.split('/video/')[0].split('/').pop();
+				const mappedVideoUrl = videoMapping.hasOwnProperty(videoId)
+					? `https://www.youtube.com/embed/${videoMapping[videoId]}`
+					: null;
 				mediaList.push({
 					id: item.vod.media.id,
 					title: item.vod.media.id ? item.title : `${item.title} Ⓜ️`,
-					hdUrl: item.vod.media.element.sources[0].uri,
-					url: item.vod.media.element.sources[1]?.uri,
+					hdUrl: mappedVideoUrl ?? item.vod.media.element.sources[0].uri,
+					url: mappedVideoUrl ?? item.vod.media.element.sources[1]?.uri,
 					thumbnail: item.vod.media.thumbnail,
 					start: item.start.split('T')[1].split('+')[0],
 					speakers: item.speakers.items
@@ -270,12 +96,25 @@
 			}
 		}
 
-		if (eventDetail.vod && eventDetail.vod.media && eventDetail.vod.media.element && eventDetail.vod.media.element.sources) {
+		if (
+			eventDetail.vod &&
+			eventDetail.vod.media &&
+			eventDetail.vod.media.element &&
+			eventDetail.vod.media.element.sources
+		) {
+			const videoId = eventDetail.vod.media.element.sources[0].uri
+				.split('/video/')[0]
+				.split('/')
+				.pop();
+			const mappedVideoUrl = videoMapping.hasOwnProperty(videoId)
+				? `https://www.youtube.com/embed/${videoMapping[videoId]}`
+				: null;
+
 			mediaList.push({
 				id: eventDetail.vod.media.id,
 				title: eventDetail.vod.media.title ?? '[Sans titre]',
-				hdUrl: eventDetail.vod.media.element.sources[0].uri,
-				url: eventDetail.vod.media.element.sources[1]?.uri,
+				hdUrl: mappedVideoUrl ?? eventDetail.vod.media.element.sources[0].uri,
+				url: mappedVideoUrl ?? eventDetail.vod.media.element.sources[1]?.uri,
 				thumbnail: eventDetail.vod.media.thumbnail,
 				start: eventDetail.start.split('T')[1].split('+')[0],
 				speakers: eventDetail.speakers.items
@@ -283,36 +122,27 @@
 		}
 
 		// Check and add hidden media
-		// if (eventDetail.picture) {
-		// 	// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
-		// 	const hiddenMedia: any = {
-		// 		id: null,
-		// 		title: '[Non répertoriée]',
-		// 		thumbnail: eventDetail.picture,
-		// 		start: eventDetail.start.split('T')[1].split('+')[0],
-		// 		speakers: null
-		// 	};
+		if (eventDetail.picture) {
+			// e.g. https://services.medicalcongress.online/congress/medias/2023/JFR-2023/2072/video/thumbs/poster.jpg
+			const videoId = eventDetail.picture.split('/video/')[0].split('/').pop();
+			if (videoMapping.hasOwnProperty(videoId)) {
+				const mappedVideoUrl = `https://www.youtube.com/embed/${videoMapping[videoId]}`;
+				const existingMedia = mediaList.find((item) => item.hdUrl === mappedVideoUrl);
+				if (!existingMedia) {
+					mediaList.push({
+						id: null,
+						title: '[Non répertoriée]',
+						hdUrl: mappedVideoUrl,
+						url: mappedVideoUrl,
+						thumbnail: eventDetail.picture,
+						start: eventDetail.start.split('T')[1].split('+')[0],
+						speakers: null
+					});
+				}
+			}
+		}
 
-		// 	const possibleHDVideoUrl =
-		// 		eventDetail.picture.split('/video/')[0] + '/video/y_1080p_4000kb.mp4';
-		// 	const addHdUrl = !mediaList.some((item) => item.hdUrl === possibleHDVideoUrl) && fileExists(possibleHDVideoUrl);
-		// 	if (addHdUrl) {
-		// 		hiddenMedia.hdUrl = possibleHDVideoUrl;
-		// 	}
-
-		// 	const possibleVideoUrl =
-		// 		eventDetail.picture.split('/video/')[0] + '/video/y_480p_800kb.mp4';
-		// 	const addUrl = !mediaList.some((item) => item.url === possibleVideoUrl) && fileExists(possibleVideoUrl);
-		// 	if (addUrl) {
-		// 		hiddenMedia.url = possibleVideoUrl;
-		// 	}
-
-		// 	if (hiddenMedia.hdUrl || hiddenMedia.url) {
-		// 		mediaList.push(hiddenMedia);
-		// 	}
-		// }
-
-		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start))
+		mediaList = mediaList.toSorted((a: any, b: any) => a.start.localeCompare(b.start));
 
 		if (mediaList.length > 0) {
 			if (selectedMediaUrl) {
@@ -327,18 +157,18 @@
 		loading = false;
 	});
 
-
 	const onMediaPlay = (media: any) => {
 		const filteredArray = $mediaHistory.filter((item: any) => item.hdUrl !== media.hdUrl);
 
 		// console.log("onMediaPlay", media);
 		const historyMedia = structuredClone(media);
-		historyMedia["sessionId"] = sessionId;
-		historyMedia["sessionTitle"] = eventDetail.title;
-		historyMedia["sessionTypeColor"] = eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
+		historyMedia['sessionId'] = sessionId;
+		historyMedia['sessionTitle'] = eventDetail.title;
+		historyMedia['sessionTypeColor'] =
+			eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
 
 		$mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
-	}
+	};
 
 	const onMediaEnded = (media: any) => {
 		if (!$prefs.autoplay) {
@@ -349,9 +179,9 @@
 		if (mediaIndex < mediaList.length - 1) {
 			currentMedia = mediaList[mediaIndex + 1];
 		}
-	}
+	};
 
-	$: if ($prefs) $prefs = {autoplay: autoplay};
+	$: if ($prefs) $prefs = { autoplay: autoplay };
 </script>
 
 <svelte:head>
@@ -367,145 +197,174 @@
 	</div>
 
 	{#if loading}
-	<div class="DNA_cont">
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-		<div class="nucleobase"></div>
-	</div>
+		<div class="DNA_cont">
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+			<div class="nucleobase"></div>
+		</div>
 	{/if}
 
 	{#if !loading && eventDetail}
-	{#if mediaList.length > 0}
-	<div class="media">
-		<div class="current-media">
-			<div id="current-media-info">
-				<div><strong>{currentMedia.title ?? '😶‍🌫️'}</strong></div>
-				{#if currentMedia.speakers}
-				<Speakers speakers={currentMedia.speakers} />
-				{/if}
-			</div>
-			<div id="video-container">
-				<video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)} on:ended={() => onMediaEnded(currentMedia)}>
+		{#if mediaList.length > 0}
+			<div class="media">
+				<div class="current-media">
+					<div id="current-media-info">
+						<div><strong>{currentMedia.title ?? '😶‍🌫️'}</strong></div>
+						{#if currentMedia.speakers}
+							<Speakers speakers={currentMedia.speakers} />
+						{/if}
+					</div>
+					<div id="video-container">
+						<!-- <video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)} on:ended={() => onMediaEnded(currentMedia)}>
 					<track kind="captions" />
-				</video>
-			</div>
-			<div class="detail screen-big" style="border-left-color: {eventDetail.sessionTypeColor}">
-				<div class="session-header">
-					<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
-					<h1>{eventDetail.title}</h1>
-					<div class="date-time subtitle">
-						<div>
-							🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
+				</video> -->
+						<iframe
+							class="youtube-player"
+							width="100%"
+							src={getBestMediaSource(currentMedia)}
+							title={currentMedia.title}
+							frameborder="0"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+							referrerpolicy="strict-origin-when-cross-origin"
+							allowfullscreen
+						></iframe>
+					</div>
+					<div class="detail screen-big" style="border-left-color: {eventDetail.sessionTypeColor}">
+						<div class="session-header">
+							<div
+								class="session-type"
+								style="color: {eventDetail.sessionTypeColor !== '#000000'
+									? eventDetail.sessionTypeColor
+									: '#dfdfdf'}"
+							>
+								{eventDetail.sessionType}
+							</div>
+							<h1>{eventDetail.title}</h1>
+							<div class="date-time subtitle">
+								<div>
+									🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
+								</div>
+								<div>
+									{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])}
+									{eventDetail.start?.split('T')[1].split('+')[0] +
+										' - ' +
+										eventDetail.end?.split('T')[1].split('+')[0]}
+								</div>
+							</div>
 						</div>
-						<div>
-							{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])} {eventDetail.start?.split('T')[1].split('+')[0] +
-								' - ' +
-								eventDetail.end?.split('T')[1].split('+')[0]}
-						</div>
+						{#if objectives}
+							<div class="objectives">
+								<strong>Objectifs :</strong>
+								<div>
+									{@html objectives}
+								</div>
+							</div>
+						{/if}
+						{#if moderators || responsables}
+							<table class="person-list">
+								{#if moderators}
+									<tr>
+										<td class="role-label">Modérateur :</td>
+										<td>
+											{#each moderators as person}
+												<Person info={person} />
+											{/each}
+										</td>
+									</tr>
+								{/if}
+								{#if responsables}
+									<tr>
+										<td class="role-label">Responsable :</td>
+										<td>
+											{#each responsables as person}
+												<Person info={person} />
+											{/each}
+										</td>
+									</tr>
+								{/if}
+							</table>
+						{/if}
 					</div>
 				</div>
-				{#if objectives}
+				<div class="playlist-container">
+					<div id="playlist-title">
+						<strong>Liste de lecture ({mediaList.length}):</strong>
+						<Switch bind:checked={autoplay} />
+					</div>
+					<div class="playlist">
+						{#each mediaList as item}
+							<MediaCard media={item} downloadable={true} bind:currentMedia />
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/if}
+		<div
+			class="detail screen-small {mediaList.length == 0 ? 'no-media' : ''}"
+			style="border-left-color: {eventDetail.sessionTypeColor}"
+		>
+			<div class="session-header">
+				<div
+					class="session-type"
+					style="color: {eventDetail.sessionTypeColor !== '#000000'
+						? eventDetail.sessionTypeColor
+						: '#dfdfdf'}"
+				>
+					{eventDetail.sessionType}
+				</div>
+				<h1>{eventDetail.title}</h1>
+				<div class="date-time subtitle">
+					<div>
+						🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
+					</div>
+					<div>
+						{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])}
+						{eventDetail.start?.split('T')[1].split('+')[0] +
+							' - ' +
+							eventDetail.end?.split('T')[1].split('+')[0]}
+					</div>
+				</div>
+			</div>
+			{#if objectives}
 				<div class="objectives">
 					<strong>Objectifs :</strong>
 					<div>
 						{@html objectives}
 					</div>
 				</div>
-				{/if}
-				{#if moderators || responsables}
+			{/if}
+			{#if moderators || responsables}
 				<table class="person-list">
 					{#if moderators}
-					<tr>
-						<td class="role-label">Modérateur :</td>
-						<td>
-							{#each moderators as person}
-							<Person info={person} />
-							{/each}
-						</td>
-					</tr>
+						<tr>
+							<td class="role-label">Modérateur :</td>
+							<td>
+								{#each moderators as person}
+									<Person info={person} />
+								{/each}
+							</td>
+						</tr>
 					{/if}
 					{#if responsables}
-					<tr>
-						<td class="role-label">Responsable :</td>
-						<td>
-							{#each responsables as person}
-							<Person info={person} />
-							{/each}
-						</td>
-					</tr>
+						<tr>
+							<td class="role-label">Responsable :</td>
+							<td>
+								{#each responsables as person}
+									<Person info={person} />
+								{/each}
+							</td>
+						</tr>
 					{/if}
 				</table>
-				{/if}
-			</div>
-		</div>
-		<div class="playlist-container">
-			<div id="playlist-title">
-				<strong>Liste de lecture ({mediaList.length}):</strong>
-				<Switch bind:checked={autoplay} />
-			</div>
-			<div class="playlist">
-				{#each mediaList as item}
-				<MediaCard media={item} downloadable={true} bind:currentMedia={currentMedia} />
-				{/each}
-			</div>
-		</div>
-	</div>
-	{/if}
-	<div class="detail screen-small {mediaList.length == 0 ? 'no-media' : ''}" style="border-left-color: {eventDetail.sessionTypeColor}">
-		<div class="session-header">
-			<div class="session-type" style="color: {eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf'}">{eventDetail.sessionType}</div>
-			<h1>{eventDetail.title}</h1>
-			<div class="date-time subtitle">
-				<div>
-					🗓️ {getFriendlyDate(eventDetail.start?.split('T')[0])}
-				</div>
-				<div>
-					{getTimeEmoji(eventDetail.start?.split('T')[1].split('+')[0])} {eventDetail.start?.split('T')[1].split('+')[0] +
-						' - ' +
-						eventDetail.end?.split('T')[1].split('+')[0]}
-				</div>
-			</div>
-		</div>
-		{#if objectives}
-		<div class="objectives">
-			<strong>Objectifs :</strong>
-			<div>
-				{@html objectives}
-			</div>
-		</div>
-		{/if}
-		{#if moderators || responsables}
-		<table class="person-list">
-			{#if moderators}
-			<tr>
-				<td class="role-label">Modérateur :</td>
-				<td>
-					{#each moderators as person}
-					<Person info={person} />
-					{/each}
-				</td>
-			</tr>
 			{/if}
-			{#if responsables}
-			<tr>
-				<td class="role-label">Responsable :</td>
-				<td>
-					{#each responsables as person}
-					<Person info={person} />
-					{/each}
-				</td>
-			</tr>
-			{/if}
-		</table>
-		{/if}
-	</div>
+		</div>
 	{/if}
 </main>
 
@@ -564,13 +423,13 @@
 		flex-grow: 0;
 		gap: 10px;
 		border-left: 6px solid;
-    	border-radius: 4px;
+		border-radius: 4px;
 		padding: 16px;
 		width: 100%;
 	}
 
 	.session-type {
-		font-size: .75rem;
+		font-size: 0.75rem;
 		font-weight: 700;
 		text-transform: uppercase;
 	}
@@ -589,7 +448,7 @@
 		border: 1px solid #e5e5e5;
 		border-radius: 4px;
 		padding: 15px;
-		font-size: .9rem;
+		font-size: 0.9rem;
 	}
 
 	:global(.objectives-value) {
@@ -603,7 +462,7 @@
 
 	.role-label {
 		color: #8e8e8e;
-		font-size: .75rem;
+		font-size: 0.75rem;
 		font-weight: 600;
 		margin-right: 8px;
 		text-transform: uppercase;
@@ -635,7 +494,8 @@
 		min-height: 469px;
 	}
 
-	#current-media-info, #playlist-title {
+	#current-media-info,
+	#playlist-title {
 		display: flex;
 		flex-direction: column;
 		border-top-left-radius: 4px;
@@ -670,8 +530,13 @@
 		min-height: 411px;
 	}
 
-	video {
+	/*video {
 		width: 100%;
+	}*/
+	iframe.youtube-player {
+		aspect-ratio: 16 / 9;
+		width: 100%;
+		height: auto;
 	}
 
 	.playlist-container {
@@ -735,11 +600,13 @@
 	}
 
 	@media (prefers-color-scheme: light) {
-		.detail, .playlist {
+		.detail,
+		.playlist {
 			background-color: #fff;
 		}
 
-		#current-media-info, #playlist-title {
+		#current-media-info,
+		#playlist-title {
 			background-color: #fdfdfd;
 			border-bottom: 1px solid #dddddd;
 		}

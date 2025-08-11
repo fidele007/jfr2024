@@ -29,7 +29,9 @@
 	let moderators: [any];
 	let responsables: [any];
 
+	let player: any;
 	let currentMedia: any;
+	let previousMedia: any;
 	let autoplay: boolean = $prefs?.autoplay ?? false;
 
 	let mediaList: {
@@ -61,6 +63,11 @@
 
 	onMount(async () => {
 		// await new Promise(r => setTimeout(r, 3000));
+
+		// Load YouTube IFrame API asynchronously
+		const tag = document.createElement('script');
+		tag.src = 'https://www.youtube.com/iframe_api';
+		document.body.appendChild(tag);
 
 		const sessionData = await fetch(`${base}/json/${sessionId}.json`);
 		sessionDetail = await sessionData.json();
@@ -146,21 +153,53 @@
 
 		if (mediaList.length > 0) {
 			if (selectedMediaUrl) {
-				currentMedia = mediaList.find((item) => item.hdUrl === selectedMediaUrl);
+				previousMedia = currentMedia = mediaList.find((item) => item.hdUrl === selectedMediaUrl);
 			}
 
 			if (!currentMedia) {
-				currentMedia = mediaList[0];
+				previousMedia = currentMedia = mediaList[0];
 			}
 		}
 
 		loading = false;
+
+		window.onYouTubeIframeAPIReady = () => {
+			const videoId = currentMedia.hdUrl.split('/').pop();
+			player = new YT.Player('player', {
+				videoId: videoId,
+				playerVars: {
+					modestbranding: 1,
+					playsinline: 1,
+					controls: 2,
+					autoplay: autoplay ? 1 : 0,
+					rel: 0, // Disable related videos at the end
+				},
+				events: {
+					onStateChange: onPlayerStateChange
+				}
+			});
+		};
+
+		// Cleanup on destroy
+		return () => {
+			if (player && player.destroy) {
+				player.destroy();
+			}
+			delete window.onYouTubeIframeAPIReady;
+		};
 	});
+
+	const onPlayerStateChange = (event: any) => {
+		if (event.data === YT.PlayerState.PLAYING) {
+			onMediaPlay(currentMedia);
+		} else if (event.data === YT.PlayerState.ENDED) {
+			onMediaEnded(currentMedia);
+		}
+	};
 
 	const onMediaPlay = (media: any) => {
 		const filteredArray = $mediaHistory.filter((item: any) => item.hdUrl !== media.hdUrl);
 
-		// console.log("onMediaPlay", media);
 		const historyMedia = structuredClone(media);
 		historyMedia['sessionId'] = sessionId;
 		historyMedia['sessionTitle'] = eventDetail.title;
@@ -178,10 +217,24 @@
 		const mediaIndex = mediaList.indexOf(media);
 		if (mediaIndex < mediaList.length - 1) {
 			currentMedia = mediaList[mediaIndex + 1];
+			playMedia(currentMedia);
 		}
 	};
 
+	const playMedia = (media: any) => {
+		if (!player || !media || media === previousMedia) {
+			return;
+		}
+
+		const videoId = media.hdUrl.split('/').pop();
+		player.loadVideoById(videoId);
+		onMediaPlay(media);
+
+		previousMedia = media;
+	};
+
 	$: if ($prefs) $prefs = { autoplay: autoplay };
+	$: currentMedia, playMedia(currentMedia);
 </script>
 
 <svelte:head>
@@ -222,19 +275,7 @@
 						{/if}
 					</div>
 					<div id="video-container">
-						<!-- <video {autoplay} controls class="video-player" src={getBestMediaSource(currentMedia)} poster={currentMedia.thumbnail} on:play={() => onMediaPlay(currentMedia)} on:ended={() => onMediaEnded(currentMedia)}>
-					<track kind="captions" />
-				</video> -->
-						<iframe
-							class="youtube-player"
-							width="100%"
-							src={getBestMediaSource(currentMedia)}
-							title={currentMedia.title}
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-							referrerpolicy="strict-origin-when-cross-origin"
-							allowfullscreen
-						></iframe>
+						<div id="player"></div>
 					</div>
 					<div class="detail screen-big" style="border-left-color: {eventDetail.sessionTypeColor}">
 						<div class="session-header">
@@ -533,7 +574,7 @@
 	/*video {
 		width: 100%;
 	}*/
-	iframe.youtube-player {
+	#player {
 		aspect-ratio: 16 / 9;
 		width: 100%;
 		height: auto;

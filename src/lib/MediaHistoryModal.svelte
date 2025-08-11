@@ -102,7 +102,6 @@
 	#dialog-container {
 		display: flex;
 		flex-direction: column;
-		height: 70vh;
 	}
 	#dialog-header {
 		display: flex;
@@ -133,10 +132,10 @@
 		width: 100%;
 	}
 	#dialog-body {
-		flex: 1;
 		display: flex;
 		flex-direction: column;
 		overflow-y: auto;
+		flex: 0 1 auto;   /* do NOT force it to fill parent */
 	}
 	.media-list {
 		display: flex;

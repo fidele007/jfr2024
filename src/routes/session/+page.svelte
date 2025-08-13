@@ -64,11 +64,6 @@
 	onMount(async () => {
 		// await new Promise(r => setTimeout(r, 3000));
 
-		// Load YouTube IFrame API asynchronously
-		const tag = document.createElement('script');
-		tag.src = 'https://www.youtube.com/iframe_api';
-		document.body.appendChild(tag);
-
 		const sessionData = await fetch(`${base}/json/${sessionId}.json`);
 		sessionDetail = await sessionData.json();
 		eventDetail = sessionDetail.data.event;
@@ -178,7 +173,13 @@
 					onStateChange: onPlayerStateChange
 				}
 			});
+			console.log('YouTube player initialized');
 		};
+
+		// Load YouTube IFrame API asynchronously
+		const tag = document.createElement('script');
+		tag.src = 'https://www.youtube.com/iframe_api';
+		document.body.appendChild(tag);
 
 		// Cleanup on destroy
 		return () => {

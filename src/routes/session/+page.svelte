@@ -6,10 +6,12 @@
 	import { getFriendlyDate, getTimeEmoji, sanitizeFilename } from '$lib/Constants.svelte';
 	import Speakers from '$lib/Speakers.svelte';
 	import Person from '$lib/Person.svelte';
-	import { mediaHistory, prefs } from '../../stores';
+	import { prefs } from '../../stores';
 	import MediaCard from '$lib/MediaCard.svelte';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 	import Switch from '$lib/Switch.svelte';
+	import { database, databaseName } from '../../firebase';
+	import { onValue, ref, set } from 'firebase/database';
 
 	const MEDIA_HISTORY_LIMIT = 25;
 
@@ -167,7 +169,7 @@
 					playsinline: 1,
 					controls: 2,
 					autoplay: autoplay ? 1 : 0,
-					rel: 0, // Disable related videos at the end
+					rel: 0 // Disable related videos at the end
 				},
 				events: {
 					onStateChange: onPlayerStateChange
@@ -199,15 +201,27 @@
 	};
 
 	const onMediaPlay = (media: any) => {
-		const filteredArray = $mediaHistory.filter((item: any) => item.hdUrl !== media.hdUrl);
+		const mediaHistoryRef = ref(database, databaseName);
+		onValue(
+			mediaHistoryRef,
+			(snapshot) => {
+				let mediaHistory = snapshot.val() || [];
+				console.log('Media history:', mediaHistory);
+				const filteredArray = mediaHistory.filter((item: any) => item.sessionId !== sessionId);
+				const historyMedia = structuredClone(media);
+				historyMedia['sessionId'] = sessionId;
+				historyMedia['sessionTitle'] = eventDetail.title;
+				historyMedia['sessionTypeColor'] =
+					eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
 
-		const historyMedia = structuredClone(media);
-		historyMedia['sessionId'] = sessionId;
-		historyMedia['sessionTitle'] = eventDetail.title;
-		historyMedia['sessionTypeColor'] =
-			eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
-
-		$mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
+				mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
+				console.log('Updated media history:', mediaHistory);
+				set(mediaHistoryRef, mediaHistory);
+			},
+			{
+				onlyOnce: true
+			}
+		);
 	};
 
 	const onMediaEnded = (media: any) => {

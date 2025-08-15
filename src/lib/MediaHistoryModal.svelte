@@ -1,11 +1,17 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { mediaHistory } from "../stores";
+	import { onMount } from 'svelte';
+	// import { mediaHistory } from "../stores";
 	import MediaCard from './MediaCard.svelte';
+	import { database, databaseName } from '../firebase';
+	import { onValue, ref, remove } from 'firebase/database';
 
 	export let showModal: boolean;
 
+	let mediaHistory: any;
 	let dialog: HTMLDialogElement;
+
+	const mediaHistoryRef = ref(database, databaseName);
 
 	$: {
 		if (showModal) dialog.showModal();
@@ -16,12 +22,22 @@
 	}
 
 	const onClearHistory = () => {
-		if (!$mediaHistory || $mediaHistory.length === 0) return;
+		if (!mediaHistory || mediaHistory.length === 0) return;
 
 		if (confirm("Êtes-vous certain de vouloir supprimer l'intégralité de votre historique ?")) {
-			$mediaHistory = [];
+			remove(mediaHistoryRef).then(() => {
+				mediaHistory = [];
+			}).catch((error) => {
+				console.error("Erreur lors de la suppression de l'historique :", error);
+			});
 		}
 	}
+
+	onMount(() => {
+		onValue(mediaHistoryRef, (snapshot) => {
+			mediaHistory = snapshot.val();
+		});
+	});
 </script>
 
 
@@ -46,11 +62,11 @@
 		</div>
 		<hr />
 		<div id="dialog-body">
-			{#if !$mediaHistory || $mediaHistory.length == 0}
+			{#if !mediaHistory || mediaHistory.length == 0}
 			<div id="placeholder">🙂‍↔️ Vous n'avez pas d'historique.</div>
 			{:else}
 			<div class="media-list">
-				{#each $mediaHistory as item}
+				{#each mediaHistory as item}
 				<MediaCard media={item} showTime={false} on:onClickMedia={(e) => onClickMedia(item)} />
 				{/each}
 			</div>

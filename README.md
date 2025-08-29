@@ -32,3 +32,25 @@ The following command is shorthand for `npm run build && npx gh-pages -d build -
 ```bash
 npm run gh-pages
 ```
+
+## Tauri build
+
+To build for ARM macOS
+
+```bash
+npm run tauri build -- --target aarch64-apple-darwin
+```
+
+To build for Intel macOS:
+
+```bash
+rustup target add x86_64-apple-darwin
+npm run tauri build -- --target x86_64-apple-darwin
+```
+
+To build a universal app that runs on both Intel and ARM builds:
+
+```bash
+rustup target add x86_64-apple-darwin
+npm run tauri build -- --target universal-apple-darwin
+```

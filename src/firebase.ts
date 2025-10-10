@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 // https://firebase.google.com/docs/web/setup#available-libraries
 import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
 // Your web app's Firebase configuration
@@ -16,9 +17,7 @@ const firebaseConfig = {
 	measurementId: 'G-FSS133Z2XH'
 };
 
-// Initialize Firebase
 export const firebaseApp = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
-
-export const databaseName = 'mediaHistory';
-export const database = getDatabase(firebaseApp);
+export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseAuthProvider = new GoogleAuthProvider();
+export const firebaseDB = getDatabase(firebaseApp);

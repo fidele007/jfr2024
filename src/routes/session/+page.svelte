@@ -6,11 +6,11 @@
 	import { getFriendlyDate, getTimeEmoji, sanitizeFilename } from '$lib/Constants.svelte';
 	import Speakers from '$lib/Speakers.svelte';
 	import Person from '$lib/Person.svelte';
-	import { prefs } from '../../stores';
+	import { localMediaHistory, prefs } from '../../stores';
 	import MediaCard from '$lib/MediaCard.svelte';
 	import MediaHistoryButton from '$lib/MediaHistoryButton.svelte';
 	import Switch from '$lib/Switch.svelte';
-	import { database, databaseName } from '../../firebase';
+	import { firebaseAuth, firebaseDB } from '../../firebase';
 	import { onValue, ref, set } from 'firebase/database';
 
 	const MEDIA_HISTORY_LIMIT = 25;
@@ -44,6 +44,7 @@
 		thumbnail: string;
 		start: string;
 		speakers: [any] | null;
+		sessionId: string | null;
 	}[] = [];
 
 	const fileExists = (fileUrl: string) => {
@@ -95,7 +96,8 @@
 					url: mappedVideoUrl ?? item.vod.media.element.sources[1]?.uri,
 					thumbnail: item.vod.media.thumbnail,
 					start: item.start.split('T')[1].split('+')[0],
-					speakers: item.speakers.items
+					speakers: item.speakers.items,
+					sessionId: sessionId
 				});
 			}
 		}
@@ -121,7 +123,8 @@
 				url: mappedVideoUrl ?? eventDetail.vod.media.element.sources[1]?.uri,
 				thumbnail: eventDetail.vod.media.thumbnail,
 				start: eventDetail.start.split('T')[1].split('+')[0],
-				speakers: eventDetail.speakers.items
+				speakers: eventDetail.speakers.items,
+				sessionId: sessionId
 			});
 		}
 
@@ -140,7 +143,8 @@
 						url: mappedVideoUrl,
 						thumbnail: eventDetail.picture,
 						start: eventDetail.start.split('T')[1].split('+')[0],
-						speakers: null
+						speakers: null,
+						sessionId: sessionId
 					});
 				}
 			}
@@ -201,27 +205,50 @@
 	};
 
 	const onMediaPlay = (media: any) => {
-		const mediaHistoryRef = ref(database, databaseName);
-		onValue(
-			mediaHistoryRef,
-			(snapshot) => {
-				let mediaHistory = snapshot.val() || [];
-				console.log('Media history:', mediaHistory);
-				const filteredArray = mediaHistory.filter((item: any) => item.sessionId !== sessionId);
-				const historyMedia = structuredClone(media);
-				historyMedia['sessionId'] = sessionId;
-				historyMedia['sessionTitle'] = eventDetail.title;
-				historyMedia['sessionTypeColor'] =
-					eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
+		if (firebaseAuth.currentUser) {
+			const remoteMediaHistoryRef = ref(
+				firebaseDB,
+				`users/${firebaseAuth.currentUser.uid}/history`
+			);
+			onValue(
+				remoteMediaHistoryRef,
+				(snapshot) => {
+					let remoteMediaHistory = snapshot.val() || [];
+					remoteMediaHistory.push(...$localMediaHistory);
+					console.log('Media history:', remoteMediaHistory);
+					const filteredArray = remoteMediaHistory.filter(
+						(item: any) => item.sessionId !== media.sessionId
+					);
+					const historyMedia = structuredClone(media);
+					historyMedia['sessionId'] = sessionId;
+					historyMedia['sessionTitle'] = eventDetail.title;
+					historyMedia['sessionTypeColor'] =
+						eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
 
-				mediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
-				console.log('Updated media history:', mediaHistory);
-				set(mediaHistoryRef, mediaHistory);
-			},
-			{
-				onlyOnce: true
-			}
-		);
+					remoteMediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
+					console.log('Updated media history:', remoteMediaHistory);
+					set(remoteMediaHistoryRef, remoteMediaHistory);
+				},
+				{
+					onlyOnce: true
+				}
+			);
+		} else {
+			// Fallback to storing history in local store for non-authenticated users
+			console.log('media.sessionId', media.sessionId);
+			const filteredArray = $localMediaHistory.filter(
+				(item: any) => item.sessionId !== media.sessionId
+			);
+			console.log('filteredArray', filteredArray);
+
+			const historyMedia = structuredClone(media);
+			historyMedia['sessionId'] = sessionId;
+			historyMedia['sessionTitle'] = eventDetail.title;
+			historyMedia['sessionTypeColor'] =
+				eventDetail.sessionTypeColor !== '#000000' ? eventDetail.sessionTypeColor : '#dfdfdf';
+
+			$localMediaHistory = [historyMedia, ...filteredArray].slice(0, MEDIA_HISTORY_LIMIT);
+		}
 	};
 
 	const onMediaEnded = (media: any) => {

@@ -7,7 +7,7 @@ export const filterOptions = localStore('filter-options', {
 	selectedDate: ''
 });
 
-// export const mediaHistory = localStore("media-history", []);
+export const localMediaHistory = localStore('media-history', []);
 
 export const prefs = localStore('prefs', {
 	autoplay: false

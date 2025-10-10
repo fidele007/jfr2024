@@ -1,89 +1,230 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 	import { onMount } from 'svelte';
-	// import { mediaHistory } from "../stores";
+	import { localMediaHistory } from '../stores';
 	import MediaCard from './MediaCard.svelte';
-	import { database, databaseName } from '../firebase';
-	import { onValue, ref, remove } from 'firebase/database';
+	import { firebaseAuth, firebaseAuthProvider, firebaseDB } from '../firebase';
+	import { onValue, ref, remove, set } from 'firebase/database';
+	import { onAuthStateChanged, signInWithPopup } from 'firebase/auth';
 
 	export let showModal: boolean;
 
-	let mediaHistory: any;
+	let displayMediaHistory: any;
 	let dialog: HTMLDialogElement;
 
-	const mediaHistoryRef = ref(database, databaseName);
-
 	$: {
-		if (showModal) dialog.showModal();
-	}
-
-	const onClickMedia = (media: any) => {
-		window.location.assign(`${base}/session?id=${media.sessionId}&media-url=${media.hdUrl}`);
-	}
-
-	const onClearHistory = () => {
-		if (!mediaHistory || mediaHistory.length === 0) return;
-
-		if (confirm("Êtes-vous certain de vouloir supprimer l'intégralité de votre historique ?")) {
-			remove(mediaHistoryRef).then(() => {
-				mediaHistory = [];
-			}).catch((error) => {
-				console.error("Erreur lors de la suppression de l'historique :", error);
-			});
+		if (showModal) {
+			getMediaHistory();
+			dialog.showModal();
 		}
 	}
 
-	onMount(() => {
-		onValue(mediaHistoryRef, (snapshot) => {
-			mediaHistory = snapshot.val();
-		});
+	const getMediaHistory = () => {
+		console.log('Fetching media history...');
+		if (firebaseAuth.currentUser) {
+			// const mediaHistoryRef = ref(firebaseDB, `users/${firebaseAuth.currentUser.uid}/history`);
+			// onValue(mediaHistoryRef, (snapshot) => {
+			// 	const remoteMediaHistory = snapshot.val();
+			// 	if ($localMediaHistory) {
+			// 		displayMediaHistory = [
+			// 			...new Set([...(remoteMediaHistory ?? []), ...($localMediaHistory ?? [])])
+			// 		];
+			// 		set(mediaHistoryRef, displayMediaHistory);
+			// 		$localMediaHistory = null;
+			// 	} else {
+			// 		displayMediaHistory = remoteMediaHistory;
+			// 	}
+			// });
+		} else {
+			displayMediaHistory = $localMediaHistory;
+		}
+	};
+
+	const onClickMedia = (media: any) => {
+		window.location.assign(`${base}/session?id=${media.sessionId}&media-url=${media.hdUrl}`);
+	};
+
+	const onClearHistory = () => {
+		if (!displayMediaHistory || displayMediaHistory.length === 0) return;
+
+		if (confirm("Êtes-vous certain de vouloir supprimer l'intégralité de votre historique ?")) {
+			$localMediaHistory = [];
+
+			if (firebaseAuth.currentUser) {
+				const mediaHistoryRef = ref(firebaseDB, `users/${firebaseAuth.currentUser.uid}/history`);
+				remove(mediaHistoryRef)
+					.then(() => {
+						displayMediaHistory = [];
+					})
+					.catch((error) => {
+						console.error("Erreur lors de la suppression de l'historique :", error);
+					});
+			} else {
+				displayMediaHistory = [];
+			}
+		}
+	};
+
+	const signIn = async () => {
+		try {
+			await signInWithPopup(firebaseAuth, firebaseAuthProvider);
+		} catch (error) {
+			console.error('Erreur lors de la connexion avec Google :', error);
+		}
+	};
+
+	onAuthStateChanged(firebaseAuth, (user) => {
+		if (user) {
+			console.log('Signed in as:', user.displayName || user.email);
+			// getMediaHistory();
+		} else {
+			// TODO: Add a sign out button to clear history for account
+			console.log('User is not signed in');
+		}
 	});
 </script>
-
 
 <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <dialog
 	bind:this={dialog}
 	on:close={() => (showModal = false)}
-	on:click={(e) => { if (e.target === dialog) dialog.close(); }}
+	on:click={(e) => {
+		if (e.target === dialog) dialog.close();
+	}}
 >
 	<div id="dialog-container">
 		<div id="dialog-header">
 			<div class="dialog-title">
 				<h2>Historique</h2>
-				<button type="button" class="btn-danger" title="Effacer l'historique" on:click={() => onClearHistory()}>
-					<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M4 7H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+				<button
+					type="button"
+					class="btn-danger"
+					title="Effacer l'historique"
+					on:click={() => onClearHistory()}
+				>
+					<svg
+						width="24px"
+						height="24px"
+						viewBox="0 0 24 24"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+						><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+							id="SVGRepo_tracerCarrier"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						></g><g id="SVGRepo_iconCarrier">
+							<path
+								d="M10 11V17"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+							<path
+								d="M14 11V17"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+							<path
+								d="M4 7H20"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+							<path
+								d="M6 7H12H18V18C18 19.6569 16.6569 21 15 21H9C7.34315 21 6 19.6569 6 18V7Z"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+							<path
+								d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+						</g></svg
+					>
 				</button>
 			</div>
 			<button type="button" title="Fermer" on:click={() => dialog.close()}>
-				<svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_429_11083)"> <path d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_429_11083"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+				<svg
+					width="24px"
+					height="24px"
+					viewBox="0 0 24 24"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+					><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g
+						id="SVGRepo_tracerCarrier"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					></g><g id="SVGRepo_iconCarrier">
+						<g clip-path="url(#clip0_429_11083)">
+							<path
+								d="M7 7.00006L17 17.0001M7 17.0001L17 7.00006"
+								stroke="currentColor"
+								stroke-width="2.5"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							></path>
+						</g>
+						<defs>
+							<clipPath id="clip0_429_11083">
+								<rect width="24" height="24" fill="white"></rect>
+							</clipPath>
+						</defs>
+					</g></svg
+				>
 			</button>
 		</div>
 		<hr />
 		<div id="dialog-body">
-			{#if !mediaHistory || mediaHistory.length == 0}
-			<div id="placeholder">🙂‍↔️ Vous n'avez pas d'historique.</div>
-			<div id="placeholder">L'historique n'est pas accessible lorsque vous êtes déconnecté.e.</div>
-			<button class="google-btn" type="button" aria-label="Se connecter avec Google">
-				<!-- Google 'G' logo (SVG) -->
-				<svg class="google-icon" viewBox="0 0 18 18" aria-hidden="true">
-					<path fill="#EA4335" d="M9 7.36v3.08h4.36c-.19 1.11-1.32 3.25-4.36 3.25-2.62 0-4.76-2.17-4.76-4.85S6.38 4.09 9 4.09c1.49 0 2.49.63 3.06 1.17l2.09-2.02C12.98 2.2 11.2 1.5 9 1.5 4.86 1.5 1.5 4.86 1.5 9s3.36 7.5 7.5 7.5c4.33 0 7.18-3.04 7.18-7.33 0-.49-.05-.87-.11-1.25H9z"/>
-					<path fill="#34A853" d="M2.37 5.79l2.52 1.85C5.52 6.03 7.08 4.9 9 4.9c1.49 0 2.49.63 3.06 1.17l2.09-2.02C12.98 2.2 11.2 1.5 9 1.5 6.2 1.5 3.79 3.07 2.37 5.79z" opacity=".001"/>
-					<path fill="#FBBC05" d="M9 16.5c2.7 0 4.96-1.77 5.76-4.28l-2.51-1.95c-.47 1.38-1.73 2.33-3.25 2.33-1.99 0-3.67-1.34-4.27-3.15l-2.55 1.97C3.61 14.73 6.09 16.5 9 16.5z"/>
-					<path fill="#4285F4" d="M16.18 9c0-.49-.05-.87-.11-1.25H9v3.08h4.36c-.19 1.11-1.32 3.25-4.36 3.25-2.62 0-4.76-2.17-4.76-4.85S6.38 4.09 9 4.09c1.49 0 2.49.63 3.06 1.17l2.09-2.02C12.98 2.2 11.2 1.5 9 1.5 4.86 1.5 1.5 4.86 1.5 9s3.36 7.5 7.5 7.5c4.33 0 7.18-3.04 7.18-7.33z"/>
-					<path fill="#34A853" d="M9 16.5c2.7 0 4.96-1.77 5.76-4.28l-2.51-1.95c-.47 1.38-1.73 2.33-3.25 2.33-1.99 0-3.67-1.34-4.27-3.15l-2.55 1.97C3.61 14.73 6.09 16.5 9 16.5z"/>
-					<path fill="#FBBC05" d="M3.73 9c0-.48.08-.94.22-1.38L1.4 5.65C.9 6.73.63 7.92.63 9c0 1.06.27 2.23.76 3.3l2.55-1.97C3.8 9.94 3.73 9.48 3.73 9z"/>
-					<path fill="#EA4335" d="M9 4.09c1.49 0 2.49.63 3.06 1.17l2.09-2.02C12.98 2.2 11.2 1.5 9 1.5 6.2 1.5 3.79 3.07 2.37 5.79l2.52 1.85C5.52 6.03 7.08 4.9 9 4.9z"/>
-				</svg>
-				<span class="label">Se connecter avec Google</span>
-			</button>
-			{:else}
-			<div class="media-list">
-				{#each mediaHistory as item}
-				<MediaCard media={item} showTime={false} on:onClickMedia={(e) => onClickMedia(item)} />
-				{/each}
-			</div>
+			{#if !displayMediaHistory || displayMediaHistory.length == 0}
+				<div id="placeholder">🙂‍↔️ Vous n'avez pas d'historique.</div>
+			{/if}
+			{#if !firebaseAuth.currentUser}
+				<div id="placeholder">
+					Pour synchroniser votre historique sur tous vos appareils, veuillez vous connecter.
+				</div>
+				<div class="container-btn">
+					<button
+						id="btn-google"
+						type="button"
+						aria-label="Se connecter avec Google"
+						on:click={signIn}
+					>
+						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"
+							><path
+								d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+								fill="#4285F4"
+							/><path
+								d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+								fill="#34A853"
+							/><path
+								d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+								fill="#FBBC05"
+							/><path
+								d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+								fill="#EA4335"
+							/><path d="M1 1h22v22H1z" fill="none" /></svg
+						>
+						<span class="label">Se connecter avec Google</span>
+					</button>
+				</div>
+			{/if}
+			{#if displayMediaHistory && displayMediaHistory.length > 0}
+				<hr />
+				<div class="media-list">
+					{#each displayMediaHistory as item}
+						<MediaCard media={item} showTime={false} on:onClickMedia={(e) => onClickMedia(item)} />
+					{/each}
+				</div>
 			{/if}
 		</div>
 	</div>
@@ -165,7 +306,7 @@
 		display: flex;
 		flex-direction: column;
 		overflow-y: auto;
-		flex: 0 1 auto;   /* do NOT force it to fill parent */
+		flex: 0 1 auto; /* do NOT force it to fill parent */
 	}
 	.media-list {
 		display: flex;
@@ -173,13 +314,42 @@
 		overflow-y: auto;
 	}
 	#placeholder {
-		margin-top: 20px;
-		margin-bottom: 20px;
+		margin-top: 10px;
+		margin-bottom: 10px;
 		text-align: center;
+	}
+	.container-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		/* height: 100vh; */
+		background-color: #ffffff;
+	}
+	#btn-google {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		border: 1px solid #e2e8f0;
+		border-radius: 0.5rem;
+		color: #334155;
+		background: none;
+		cursor: pointer;
+		transition: all 150ms ease-in-out;
+		user-select: none;
+	}
+	#btn-google:hover {
+		border-color: #94a3b8;
+		color: #0f172a;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 	}
 	@media (prefers-color-scheme: dark) {
 		dialog {
 			background-color: #363062;
+		}
+		#btn-google:hover {
+			border-color: #6b7280;
+			color: #d1d5db;
 		}
 	}
 
